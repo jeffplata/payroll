@@ -1,0 +1,89 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    {% if title %}{{ title }} - {{ user_manager.app_name }}{% else %}Welcome to {{ user_manager.app_name }}{% endif %}
+{% endblock %}
+
+{% import "bootstrap/fixes.html" as fixes %}
+{% block head %}
+  {{super()}}
+  {{fixes.ie8()}}
+  {{ fontawesome_html() }}
+{% endblock %}
+
+{% block styles %}
+  {{super()}}
+  <link href="/static/css/global.css" rel="stylesheet">
+  <link href="/static/css/style.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+
+  {% block navbar %}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/"><b>{{ user_manager.app_name }}</b></a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <strong>
+          <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('main.index') }}">Home Page</a></li>
+            <li><a href="#">Employees</a></li>
+            <li><a href="{{ url_for('library.list_sections') }}">Sections</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+              {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('user.profile') }}"><span class="glyphicon glyphicon-user"></span> {{ _('Hello, ') }}{{current_user.username}}</a></li>
+                <li><a href="{{ url_for('user.logout') }}">{{ 'Sign out' }}</a></li>
+              {% else %}
+                <li><a href="{{ url_for('user.register') }}">{{ 'Register' }}</a></li>
+                <li><a href="{{ url_for('user.login') }}"><span class="glyphicon glyphicon-log-in"></span>  {{ _('Sign in') }}</a></li>
+              {% endif %}
+            </ul>
+          </strong>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+  {% endblock %}
+
+
+  <div class="container">
+    <div id="main-div" class="with-margins">
+<!-- 
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message | safe }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+-->
+
+      {% import "bootstrap/utils.html" as utils %} {{ utils.flashed_messages(dismissible=True, container=False) }}
+      
+      {% block main_content %}{% endblock %}
+      
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="text-muted">&copy; <script type="text/javascript">var mdate = new Date(); document.write(mdate.getFullYear());</script>  {{ user_manager.app_name }}</p>
+    </div>
+  </footer>
+
+  {% block scripts %}
+    {{super()}}
+  {% endblock %}
+
+
+{% endblock %}

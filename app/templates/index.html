@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block main_content %}
+<p>
+<h1>Welcome!</h1>
+</p>
+<p>
+    This is <strong>Jeff's Flask Starter App</strong>.
+</p>
+<p>
+    <b>Features:</b>
+    <ul>
+        <li>Authentication and RBAC using Flask-user</li>
+        <li>User management, sign-up, login, change password, forgot password</li>
+        <li>Admin interface using Flask-admin</li>
+        <li>Error logging; error mailing</li>
+        <li>Cosmetics using Flask-Bootstrap</li>
+        <li>Modular using Blueprints</li>
+        <li>Database migrations with SQLAlchemy/Alembic</li>
+    </ul>
+    <br>
+    <b>Steps:</b>
+    <ol>
+        <li>flask db init</li>
+        <li>flask db migrate</li>
+        <li>flask db upgrade</li>
+        <li>edit config.py; set USER_APP_NAME</li>
+    </ol>
+
+</p>
+
+{% endblock %}
