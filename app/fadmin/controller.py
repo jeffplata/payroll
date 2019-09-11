@@ -8,11 +8,13 @@ from flask_admin.contrib.sqla import ModelView
 
 from app import db
 from app.user_models import User, Role
-from flask import current_app, render_template
+from flask import current_app, render_template, request
 
 from werkzeug import secure_filename
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
+from wtforms import SubmitField
+from app.models import Section
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -65,25 +67,19 @@ class MyView(BaseView):
         self.admin = admin
 
 
-class UploadForm(Form):
-    filename = FileField('File name')
+class UploadForm(FlaskForm):
+    filename = FileField('Select and Excel Source File')
+    submit = SubmitField('Import Selected File')
 
 
-@bp.route('/sections_import')
+@bp.route('/sections-import', methods=['GET', 'POST'])
 def sections_import():
     form = UploadForm()
     if form.validate_on_submit():
-        filename = secure_filename(form.photo.data.filename)
+        filename = secure_filename(form.filename.data.filename)
+        request.save_book_to_database(
+            field_name='filename', session=db.session,
+            tables=[Section],)
     else:
         filename = None
     return MyView().render("fadmin/import_sections.html", form=form)
-
-
-# @app.route('/upload/', methods=('GET', 'POST'))
-# def upload():
-#     form = PhotoForm()
-#     if form.validate_on_submit():
-#         filename = secure_filename(form.photo.data.filename)
-#     else:
-#         filename = None
-#     return render_template('upload.html', form=form, filename=filename)

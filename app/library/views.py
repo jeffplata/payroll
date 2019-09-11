@@ -1,4 +1,4 @@
-from flask import abort, flash, redirect, render_template, url_for
+from flask import abort, flash, redirect, render_template, url_for, request
 from flask_login import current_user, login_required
 
 # from . import admin
@@ -16,22 +16,35 @@ def check_admin():
         abort(403)
 
 
+# @bp.route('/sections_test', methods=['GET', 'POST'])
+# def sections_test()
+#     return 
+
 # Section Views
-
-
-@bp.route('/sections', methods=['GET', 'POST'])
+@bp.route('/sections/', methods=['GET', 'POST'])
+@bp.route('/sections/<search>', methods=['GET', 'POST'])
 @login_required
-def list_sections():
+def list_sections(search=None):
     """
     List all sections
     """
-    
-    check_admin()
 
-    sections = Section.query.all()
+    check_admin()
+    # if request.method == 'GET':
+    #     search = request.form['search1']
+
+    search_text = request.args.get('search')
+
+    title = 'Sections'
+    print(search_text)
+
+    if search_text is not None:
+        sections = Section.query.filter(Section.name.contains(search_text)).all()
+    else:
+        sections = Section.query.all()
 
     return render_template('library/sections/sections.html',
-                           sections=sections, title="Sections")
+                           sections=sections, title=title)
 
 
 @bp.route('/sections/add', methods=['GET', 'POST'])
@@ -108,3 +121,15 @@ def delete_section(id):
     return redirect(url_for('library.list_sections'))
 
     return render_template(title="Delete Section")
+
+
+# @bp.route('/sections/<search>', methods=['GET', 'POST'])
+# @login_required
+# def search_section(search):
+#     check_admin()
+
+#     sections = Section.query.filter(Section.name.contains(search))
+
+#     return render_template('library/sections/sections.html',
+#                            sections=sections, title="Sections2")
+

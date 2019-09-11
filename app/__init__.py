@@ -9,6 +9,7 @@ from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from flask_user import UserManager, SQLAlchemyAdapter
 from flask_fontawesome import FontAwesome
+import flask_excel as excel
 
 db = SQLAlchemy()
 
@@ -30,12 +31,11 @@ def create_app(config_class=Config):
 
     db.init_app(app)
     migrate.init_app(app, db)
-
     mail.init_app(app)
     user_manager.init_app(app)
-
     bootstrap.init_app(app)
     fa.init_app(app)
+    excel.init_excel(app)
 
     with app.app_context():
         from app.main import bp as main_bp
