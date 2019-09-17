@@ -1,8 +1,10 @@
 {% import "bootstrap/utils.html" as utils %}
+{% import "_macros.html" as macros %}
 {% extends "layout.html" %}
 
 {% block title %}Sections{% endblock %}
 {% block main_content %}
+
 <div class="content-section">
   <div class="outer">
     <div class="middle">
@@ -24,7 +26,6 @@
                             <i class="fa fa-plus"></i>
                             Add Section
                             </a>
-                    <!-- <button type="submit" class="btn btn-primary mb-2"><i class="fa fa-plus"></i> Add Section</button> -->
                 </div>
             </div>
         </form>
@@ -33,6 +34,9 @@
           <hr class="intro-divider">
           {% if request.args['search'] %}
           <strong>Sections containing '{{ request.args['search'] }}'</strong>
+          {% endif %}
+          {% if pages|length > 3 %}
+          {{ macros.pagination_widget(pages, 'library.list_sections') }}
           {% endif %}
           <div class="center">
             <table class="table table-striped table-bordered">
@@ -45,19 +49,19 @@
                 </tr>
               </thead>
               <tbody>
-              {% for section in sections %}
+              {% for d in data_to_show %}
                 <tr>
-                  <td> {{ section.name }} </td>
+                  <td> {{ d.name }} </td>
                   <td>
                     0
                   </td>
                   <td>
-                    <a href="{{ url_for('library.edit_section', id=section.id) }}">
+                    <a href="{{ url_for('library.edit_section', id=d.id) }}">
                       <i class="fa fa-pen"></i> Edit 
                     </a>
                   </td>
                   <td>
-                    <a href="{{ url_for('library.delete_section', id=section.id) }}">
+                    <a href="{{ url_for('library.delete_section', id=d.id) }}">
                       <i class="fa fa-trash"></i> Delete 
                     </a>
                   </td>
@@ -78,10 +82,12 @@
           </div>
           <hr class="intro-divider">
         {% endif %}
+          <div style="text-align: center">
           <a href="{{ url_for('library.add_section') }}" class="btn btn-primary btn-default btn-md">
             <i class="fa fa-plus"></i>
             Add Section
           </a>
+          </div>
         </div>
       </div>
     </div>

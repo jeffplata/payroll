@@ -20,6 +20,11 @@
             {% endif %}
             <br/>
             {{ wtf.quick_form(form) }}
+            <br>
+            <a href="{{ request.referrer }}" class="btn btn-primary btn-default btn-md">
+                    <i class="fa fa-arrow-left"></i>
+                    Back
+                    </a>
         </div>
       </div>
     </div>

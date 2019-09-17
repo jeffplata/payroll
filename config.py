@@ -30,3 +30,7 @@ class Config(object):
     # flask-user settings
     USER_APP_NAME = 'Payroll Master'
     USER_ENABLE_CHANGE_USERNAME = False
+
+    # pagination
+    PAGE_SIZE = 20
+    VISIBLE_PAGE_COUNT = 10
