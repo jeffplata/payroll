@@ -1,13 +1,18 @@
 {% extends 'admin/base.html' %}
 
 {% block body %}
-<font size="+2">Tasks</font>
-<br>
-{% block my_content %}
-    <a href="{{ url_for('fadmin.sections_import') }}">Import to <i>Sections</i></a>
+    <font size="+2">Tasks</font>
     <br>
-    <a href="#">Export <i>Sections</i></a>
-    <br><br>
-    <a href="#">Other import/export</a>
-{% endblock %}
+    {% block my_content %}
+        <a href="{{ url_for('fadmin.library_import', library='Section') }}">Import to Sections</a>
+        <br>
+        <a href="{{ url_for('fadmin.library_import', library='Office') }}">Import to Offices</a>
+        <br>
+        <a href="{{ url_for('fadmin.library_import', library='Salary') }}">Import to Salaries</a>
+        <br>
+        <a href="{{ url_for('fadmin.library_import', library='Position') }}">Import to Positions</a>
+        <br>
+        <a href="{{ url_for('fadmin.library_import', library='Plantilla') }}">Import to Plantilla</a>
+        <br>
+    {% endblock %}
 {% endblock %}

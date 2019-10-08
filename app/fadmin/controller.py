@@ -1,9 +1,9 @@
 from app.fadmin import bp
-from flask import url_for
-from flask_user import current_user
+from flask import url_for, flash, redirect
+from flask_user import current_user, roles_required
 
 from flask_admin.menu import MenuLink
-from flask_admin import Admin, AdminIndexView, BaseView, expose
+from flask_admin import Admin, AdminIndexView, BaseView
 from flask_admin.contrib.sqla import ModelView
 
 from app import db
@@ -14,7 +14,10 @@ from werkzeug import secure_filename
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import SubmitField
-from app.models import Section
+
+# app specifics
+from app.models import Section, Office, Salary_reference, Salary, \
+    Position, Plantilla
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -54,6 +57,43 @@ admin.add_view(MyUserModelView(User, db.session))
 admin.add_view(MyRoleModelView(Role, db.session))
 
 
+# App specific views
+class MyAppLibraryView(MyModelView):
+    column_searchable_list = ['name', ]
+    form_excluded_columns = ['date_created', 'date_modified', ]
+    column_display_pk = True
+
+
+class MyAppLibraryViewNoName(MyModelView):
+    form_excluded_columns = ['date_created', 'date_modified', ]
+    column_display_pk = True
+
+
+class MyAppLibraryViewSalary(MyModelView):
+    form_excluded_columns = ['date_created', 'date_modified', ]
+    column_list = ('sg', 'step', 'amount', 'salary_reference')
+    form_columns = column_list
+    column_filters = ('sg', 'step')
+    column_display_pk = True
+
+
+class MyAppLibraryViewPlantilla(MyModelView):
+    form_excluded_columns = ['date_created', 'date_modified', ]
+    column_list = ('id', 'itemno', 'name', 'sg', 'position', 'office', 'section')
+    form_columns = column_list
+    column_display_pk = True
+
+
+admin.add_view(MyAppLibraryView(Section, db.session))
+admin.add_view(MyAppLibraryView(Office, db.session))
+admin.add_view(MyAppLibraryViewNoName(Salary_reference, db.session))
+admin.add_view(MyAppLibraryViewSalary(Salary, db.session))
+admin.add_view(MyAppLibraryView(Position, db.session))
+admin.add_view(MyAppLibraryViewPlantilla(Plantilla, db.session))
+
+# End: App specific views
+
+
 @bp.before_app_first_request
 def assign_links_to_admin():
     admin.add_link(MenuLink(name='Public Website', category='', url=url_for('main.index')))
@@ -68,18 +108,32 @@ class MyView(BaseView):
 
 
 class UploadForm(FlaskForm):
-    filename = FileField('Select and Excel Source File')
+    filename = FileField('Select Excel Source File')
     submit = SubmitField('Import Selected File')
 
 
-@bp.route('/sections-import', methods=['GET', 'POST'])
-def sections_import():
+@bp.route('/library-import/<library>', methods=['GET', 'POST'])
+@roles_required('admin')
+def library_import(library):
+    if library == 'Section':
+        tables = [Section]
+    elif library == 'Office':
+        tables = [Office]
+    elif library == 'Salary':
+        tables = [Salary]
+    elif library == 'Position':
+        tables = [Position]
+    elif library == 'Plantilla':
+        tables = [Plantilla]
+    title = 'Import to '+library
     form = UploadForm()
     if form.validate_on_submit():
         filename = secure_filename(form.filename.data.filename)
         request.save_book_to_database(
             field_name='filename', session=db.session,
-            tables=[Section],)
+            tables=tables,)
+        flash("You have successfully imported '{}' to {}".format(filename, library))
+        return redirect(url_for('admin.index'))
     else:
         filename = None
-    return MyView().render("fadmin/import_sections.html", form=form)
+    return MyView().render("fadmin/import_library.html", form=form, title=title)

@@ -1,5 +1,5 @@
 from flask import abort, flash, redirect, render_template, url_for, \
-    request, current_app
+    request, current_app, session
 from flask_login import current_user, login_required
 
 from .forms import SectionForm
@@ -58,6 +58,8 @@ def list_sections():
         pages = None
         data_to_show = None
 
+    session['back_url'] = request.url
+
     return render_template('library/sections/sections.html',
                            sections=sections, title=title,
                            pages=pages, data_to_show=data_to_show)
@@ -86,6 +88,8 @@ def add_section():
             flash('Error: section name already exists.')
 
         # redirect to sections page
+        if 'back_url' in session:
+            return redirect(session['back_url'])
         return redirect(url_for('library.list_sections'))
 
     # load section template
@@ -112,9 +116,9 @@ def edit_section(id):
         flash('You have successfully edited the section.')
 
         # redirect to the sections page
-        # return redirect(url_for('library.list_sections'))
-        return redirect(request.referrer)
-        # TODO: find the referrer page
+        if 'back_url' in session:
+            return redirect(session['back_url'])
+        return redirect(url_for('library.list_sections'))
 
     form.name.data = section.name
     return render_template('library/sections/section.html', action="Edit",
@@ -131,11 +135,15 @@ def delete_section(id):
     check_admin()
 
     section = Section.query.get_or_404(id)
+    # if window.confirm('Delete '+section.name):
     db.session.delete(section)
     db.session.commit()
     flash('You have successfully deleted the section.')
 
     # redirect to the sections page
+    # return redirect(url_for('library.list_sections'))
+    if 'back_url' in session:
+        return redirect(session['back_url'])
     return redirect(url_for('library.list_sections'))
 
-    return render_template(title="Delete Section")
+    # return render_template(title="Delete Section")

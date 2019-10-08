@@ -22,9 +22,12 @@ class User(Base, UserMixin):
 
     roles = db.relationship('Role', secondary='auth_user_roles',
                             backref=db.backref('users', lazy='dynamic'))
-    
+
     def __repr__(self):
         return '<User %r>' % (self.username)
+
+    def __str__(self):
+        return self.username
 
     # def set_password(self, password):
     #     self.password = generate_password_hash(password)
