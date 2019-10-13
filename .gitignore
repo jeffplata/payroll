@@ -45,3 +45,4 @@ logs
 .flaskenv
 .vscode
 app.sqlite 
+_donttrackthis

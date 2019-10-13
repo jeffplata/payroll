@@ -12,6 +12,9 @@ class Section(db.Model):
     def __repr__(self):
         return '<Section %r>' % (self.name)
 
+    def __str__(self):
+        return self.name
+
 
 class Office(db.Model):
     __tablename__ = 'office'
@@ -70,11 +73,28 @@ class Position(db.Model):
     date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
                               onupdate=db.func.current_timestamp())
 
+    def __str__(self):
+        return self.name
+
+
+class Plantilla_type(db.Model):
+    __tablename__ = 'plantilla_type'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False, unique=True)
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
+                              onupdate=db.func.current_timestamp())
+
+    def __str__(self):
+        return self.name
+
 
 class Plantilla(db.Model):
     __tablename__ = 'plantilla'
     id = db.Column(db.Integer, primary_key=True)
     itemno = db.Column(db.String(20), nullable=False, unique=True)
+    plantilla_type_id = db.Column(db.Integer,
+            db.ForeignKey('plantilla_type.id', ondelete='CASCADE'))
     position_id = db.Column(db.Integer,
             db.ForeignKey('position.id', ondelete='CASCADE'))
     office_id = db.Column(db.Integer,
@@ -86,6 +106,7 @@ class Plantilla(db.Model):
     date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
                               onupdate=db.func.current_timestamp())
 
+    plantilla_type = db.relationship('Plantilla_type')
     position = db.relationship('Position')
     office = db.relationship('Office')
     section = db.relationship('Section')

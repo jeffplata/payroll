@@ -14,10 +14,11 @@ from werkzeug import secure_filename
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import SubmitField
+from sqlalchemy.orm.attributes import InstrumentedAttribute
 
 # app specifics
 from app.models import Section, Office, Salary_reference, Salary, \
-    Position, Plantilla
+    Position, Plantilla, Plantilla_type
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -39,6 +40,26 @@ class MyModelView(ModelView):
     edit_modal = True
     column_hide_backrefs = False
     can_export = True
+    column_filter_labels = []
+    search_placeholder_text = []
+
+    # Customize the filter labels if desired
+    #   (define column_filter_labels)
+    def scaffold_filters(self, name):
+        filters = super().scaffold_filters(name)
+        if name in self.column_filter_labels:
+            for f in filters:
+                f.name = self.column_filter_labels[name]
+        return filters
+
+    # Customize the search placeholders if desired
+    #   (define search_placeholder_text)
+    def search_placeholder(self):
+        placeholders = super().search_placeholder()
+        if self.search_placeholder_text:
+            placeholders = self.search_placeholder_text
+            placeholders = 'Search: '+u', '.join(placeholders)
+        return placeholders
 
 
 class MyUserModelView(MyModelView):
@@ -69,19 +90,24 @@ class MyAppLibraryViewNoName(MyModelView):
     column_display_pk = True
 
 
-class MyAppLibraryViewSalary(MyModelView):
-    form_excluded_columns = ['date_created', 'date_modified', ]
+class MyAppLibraryViewSalary(MyAppLibraryViewNoName):
     column_list = ('sg', 'step', 'amount', 'salary_reference')
     form_columns = column_list
     column_filters = ('sg', 'step')
-    column_display_pk = True
 
 
-class MyAppLibraryViewPlantilla(MyModelView):
-    form_excluded_columns = ['date_created', 'date_modified', ]
-    column_list = ('id', 'itemno', 'name', 'sg', 'position', 'office', 'section')
+class MyAppLibraryViewPlantilla(MyAppLibraryViewNoName):
+    column_list = ('id', 'itemno', 'sg', 'position', 'office', 'section',
+                   'plantilla_type')
     form_columns = column_list
-    column_display_pk = True
+    column_searchable_list = (Plantilla.itemno, Position.name, Office.name,
+                              Section.name)
+    search_placeholder_text = ['Item No.', 'Position', 'Office', 'Section']
+    column_filters = (Position.name, Office.name, Section.name,
+                      Plantilla_type.name, 'sg')
+    column_filter_labels = {Position.name: 'Position', Office.name: 'Office',
+                            Section.name: 'Section',
+                            Plantilla_type.name: 'Type', 'sg': 'Salary Grade'}
 
 
 admin.add_view(MyAppLibraryView(Section, db.session))
@@ -89,6 +115,7 @@ admin.add_view(MyAppLibraryView(Office, db.session))
 admin.add_view(MyAppLibraryViewNoName(Salary_reference, db.session))
 admin.add_view(MyAppLibraryViewSalary(Salary, db.session))
 admin.add_view(MyAppLibraryView(Position, db.session))
+admin.add_view(MyAppLibraryView(Plantilla_type, db.session))
 admin.add_view(MyAppLibraryViewPlantilla(Plantilla, db.session))
 
 # End: App specific views
