@@ -18,7 +18,7 @@ from sqlalchemy.orm.attributes import InstrumentedAttribute
 
 # app specifics
 from app.models import Section, Office, Salary_reference, Salary, \
-    Position, Plantilla, Plantilla_type
+    Position, Plantilla, Plantilla_type, Employee
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -42,6 +42,7 @@ class MyModelView(ModelView):
     can_export = True
     column_filter_labels = []
     search_placeholder_text = []
+    column_display_pk = True
 
     # Customize the filter labels if desired
     #   (define column_filter_labels)
@@ -82,12 +83,10 @@ admin.add_view(MyRoleModelView(Role, db.session))
 class MyAppLibraryView(MyModelView):
     column_searchable_list = ['name', ]
     form_excluded_columns = ['date_created', 'date_modified', ]
-    column_display_pk = True
 
 
 class MyAppLibraryViewNoName(MyModelView):
     form_excluded_columns = ['date_created', 'date_modified', ]
-    column_display_pk = True
 
 
 class MyAppLibraryViewSalary(MyAppLibraryViewNoName):
@@ -110,6 +109,17 @@ class MyAppLibraryViewPlantilla(MyAppLibraryViewNoName):
                             Plantilla_type.name: 'Type', 'sg': 'Salary Grade'}
 
 
+class MyAppLibraryViewEmployee(MyAppLibraryViewNoName):
+    column_list = ('id', 'employee_no', 'last_name', 'first_name',
+                   'middle_name', 'birth_date', 'etd_nfa')
+    form_columns = column_list
+    column_searchable_list = ('employee_no', 'last_name', 'first_name',
+                              'middle_name')
+    search_placeholder_text = ['Employee No.', 'Name']
+    column_filters = ('birth_date', 'etd_nfa')
+    column_filter_labels = {'birth_date': 'Birth Date', 'etd_nfa': 'ETD to NFA'}
+
+
 admin.add_view(MyAppLibraryView(Section, db.session))
 admin.add_view(MyAppLibraryView(Office, db.session))
 admin.add_view(MyAppLibraryViewNoName(Salary_reference, db.session))
@@ -117,6 +127,7 @@ admin.add_view(MyAppLibraryViewSalary(Salary, db.session))
 admin.add_view(MyAppLibraryView(Position, db.session))
 admin.add_view(MyAppLibraryView(Plantilla_type, db.session))
 admin.add_view(MyAppLibraryViewPlantilla(Plantilla, db.session))
+admin.add_view(MyAppLibraryViewEmployee(Employee, db.session))
 
 # End: App specific views
 
@@ -152,6 +163,8 @@ def library_import(library):
         tables = [Position]
     elif library == 'Plantilla':
         tables = [Plantilla]
+    elif library == 'Employee':
+        tables = [Employee]
     title = 'Import to '+library
     form = UploadForm()
     if form.validate_on_submit():

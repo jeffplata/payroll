@@ -110,3 +110,18 @@ class Plantilla(db.Model):
     position = db.relationship('Position')
     office = db.relationship('Office')
     section = db.relationship('Section')
+
+
+class Employee(db.Model):
+    __tablename__ = 'employee'
+    id = db.Column(db.Integer, primary_key=True)
+    employee_no = db.Column(db.String(20), unique=True)
+    last_name = db.Column(db.String(80), nullable=False)
+    first_name = db.Column(db.String(80), nullable=False)
+    middle_name = db.Column(db.String(80))
+    birth_date = db.Column(db.DateTime)
+    etd_nfa = db.Column(db.DateTime)
+
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
+                              onupdate=db.func.current_timestamp())
