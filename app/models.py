@@ -1,4 +1,5 @@
 from app import db
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class Section(db.Model):
@@ -61,7 +62,8 @@ class Salary(db.Model):
         return '<Salary: %r/%r/%r>' % (self.sg, self.step, self.amount)
 
     def __str__(self):
-        return '{:2} {:2} {:10,.2f}'.format(self.sg, self.step, self.amount)
+        return '[SG:{:2} Step:{:2}] {:10,.2f}'.format(self.sg, self.step,
+                                                      self.amount)
 
 
 class Position(db.Model):
@@ -111,6 +113,9 @@ class Plantilla(db.Model):
     office = db.relationship('Office')
     section = db.relationship('Section')
 
+    def __str__(self):
+        return '[{}] {}'.format(self.itemno, self.position.name)
+
 
 class Employee(db.Model):
     __tablename__ = 'employee'
@@ -119,9 +124,35 @@ class Employee(db.Model):
     last_name = db.Column(db.String(80), nullable=False)
     first_name = db.Column(db.String(80), nullable=False)
     middle_name = db.Column(db.String(80))
-    birth_date = db.Column(db.DateTime)
-    etd_nfa = db.Column(db.DateTime)
+    birth_date = db.Column(db.Date)
+    etd_nfa = db.Column(db.Date)
 
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
                               onupdate=db.func.current_timestamp())
+
+    @property
+    def full_name(self):
+        return self.__str__()
+
+    def __str__(self):
+        return ', '.join(filter(None, [self.last_name, self.first_name,
+                                       self.middle_name]))
+
+
+class Employee_Detail(db.Model):
+    __tablename__ = 'employee_detail'
+    id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer,
+        db.ForeignKey('employee.id', ondelete='CASCADE'))
+    plantilla_id = db.Column(db.Integer,
+        db.ForeignKey('plantilla.id', ondelete='CASCADE'))
+    salary_id = db.Column(db.Integer,
+        db.ForeignKey('salary.id', ondelete='CASCADE'))
+    assigned_office_id = db.Column(db.Integer,
+        db.ForeignKey('office.id', ondelete='CASCADE'))
+
+    employee = db.relationship('Employee')
+    plantilla = db.relationship('Plantilla')
+    salary = db.relationship('Salary')
+    assigned_office = db.relationship('Office')

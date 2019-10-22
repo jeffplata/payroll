@@ -18,7 +18,7 @@ from sqlalchemy.orm.attributes import InstrumentedAttribute
 
 # app specifics
 from app.models import Section, Office, Salary_reference, Salary, \
-    Position, Plantilla, Plantilla_type, Employee
+    Position, Plantilla, Plantilla_type, Employee, Employee_Detail
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -98,7 +98,7 @@ class MyAppLibraryViewSalary(MyAppLibraryViewNoName):
 class MyAppLibraryViewPlantilla(MyAppLibraryViewNoName):
     column_list = ('id', 'itemno', 'sg', 'position', 'office', 'section',
                    'plantilla_type')
-    form_columns = column_list
+    form_columns = column_list[2:]
     column_searchable_list = (Plantilla.itemno, Position.name, Office.name,
                               Section.name)
     search_placeholder_text = ['Item No.', 'Position', 'Office', 'Section']
@@ -112,12 +112,23 @@ class MyAppLibraryViewPlantilla(MyAppLibraryViewNoName):
 class MyAppLibraryViewEmployee(MyAppLibraryViewNoName):
     column_list = ('id', 'employee_no', 'last_name', 'first_name',
                    'middle_name', 'birth_date', 'etd_nfa')
-    form_columns = column_list
+    form_columns = column_list[2:]
     column_searchable_list = ('employee_no', 'last_name', 'first_name',
                               'middle_name')
     search_placeholder_text = ['Employee No.', 'Name']
     column_filters = ('birth_date', 'etd_nfa')
     column_filter_labels = {'birth_date': 'Birth Date', 'etd_nfa': 'ETD to NFA'}
+
+
+class MyAppLibraryViewEmpDetail(MyAppLibraryViewNoName):
+    column_list = ('id', 'employee.employee_no', 'employee.full_name',
+                   'plantilla.position', 'plantilla.office',
+                   'assigned_office')
+    column_labels = {'id': 'id', 'employee.employee_no': 'Number',
+                     'employee.full_name': 'Full Name',
+                     'plantilla.position': 'Position',
+                     'plantilla.office': 'Office'}
+    column_searchable_list = (Position.name)
 
 
 admin.add_view(MyAppLibraryView(Section, db.session))
@@ -128,6 +139,7 @@ admin.add_view(MyAppLibraryView(Position, db.session))
 admin.add_view(MyAppLibraryView(Plantilla_type, db.session))
 admin.add_view(MyAppLibraryViewPlantilla(Plantilla, db.session))
 admin.add_view(MyAppLibraryViewEmployee(Employee, db.session))
+admin.add_view(MyAppLibraryViewEmpDetail(Employee_Detail, db.session))
 
 # End: App specific views
 
