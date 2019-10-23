@@ -128,7 +128,12 @@ class MyAppLibraryViewEmpDetail(MyAppLibraryViewNoName):
                      'employee.full_name': 'Full Name',
                      'plantilla.position': 'Position',
                      'plantilla.office': 'Office'}
-    column_searchable_list = (Position.name)
+    column_searchable_list = ['plantilla.position.name',
+                              'plantilla.office.name',
+                              'assigned_office.name',
+                              'employee.employee_no']
+    search_placeholder_text = ['Employee No.', 'Name', 'Position', 'Office',
+                              'Assigned Office']
 
 
 admin.add_view(MyAppLibraryView(Section, db.session))
