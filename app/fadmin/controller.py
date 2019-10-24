@@ -8,13 +8,14 @@ from flask_admin.contrib.sqla import ModelView
 
 from app import db
 from app.user_models import User, Role
-from flask import current_app, render_template, request
+from flask import current_app, request
 
 from werkzeug import secure_filename
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import SubmitField
-from sqlalchemy.orm.attributes import InstrumentedAttribute
+# from sqlalchemy.orm.attributes import InstrumentedAttribute
+from flask_admin.contrib.sqla.filters import FilterEqual
 
 # app specifics
 from app.models import Section, Office, Salary_reference, Salary, \
@@ -133,7 +134,12 @@ class MyAppLibraryViewEmpDetail(MyAppLibraryViewNoName):
                               'assigned_office.name',
                               'employee.employee_no']
     search_placeholder_text = ['Employee No.', 'Name', 'Position', 'Office',
-                              'Assigned Office']
+                               'Assigned Office']
+    column_filters = [
+        FilterEqual(column='employee.employee_no',
+                    name='Position',
+                    options=((1, 'Apples'),(2, 'Oranges'),(u'430014', u'430014')))
+    ]
 
 
 admin.add_view(MyAppLibraryView(Section, db.session))
