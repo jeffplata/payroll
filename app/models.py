@@ -61,9 +61,11 @@ class Salary(db.Model):
     def __repr__(self):
         return '<Salary: %r/%r/%r>' % (self.sg, self.step, self.amount)
 
+    # def __str__(self):
+    #     return '[SG:{:2} Step:{:2}] {:10,.2f}'.format(self.sg, self.step,
+    #                                                   self.amount)
     def __str__(self):
-        return '[SG:{:2} Step:{:2}] {:10,.2f}'.format(self.sg, self.step,
-                                                      self.amount)
+        return '[{}-{}] {:10,.2f}'.format(self.sg, self.step, self.amount)
 
 
 class Position(db.Model):

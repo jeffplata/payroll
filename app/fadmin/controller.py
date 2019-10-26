@@ -14,8 +14,8 @@ from werkzeug import secure_filename
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import SubmitField
-# from sqlalchemy.orm.attributes import InstrumentedAttribute
-from flask_admin.contrib.sqla.filters import FilterEqual
+from flask_admin.contrib.sqla.filters import BaseSQLAFilter
+from sqlalchemy.orm import aliased
 
 # app specifics
 from app.models import Section, Office, Salary_reference, Salary, \
@@ -121,6 +121,32 @@ class MyAppLibraryViewEmployee(MyAppLibraryViewNoName):
     column_filter_labels = {'birth_date': 'Birth Date', 'etd_nfa': 'ETD to NFA'}
 
 
+# class FilterByPosition(BaseSQLAFilter):
+#     def apply(self, query, value, alias=None):
+#         p1 = aliased(Plantilla, name='plantilla1')
+#         return query.join(p1).join(Position).filter(Position.name == value)
+
+#     def operation(self):
+#         return u'equals'
+
+#     def get_options(self, view):
+#         return [(position.name, position.name)
+#                 for position in Position.query.order_by(Position.name)]
+
+
+# class FilterByOffice(BaseSQLAFilter):
+#     def apply(self, query, value, alias=None):
+#         p2 = aliased(Plantilla, name='plantilla2')
+#         return query.join(p2).join(Office).filter(Office.name == value)
+
+#     def operation(self):
+#         return u'equals'
+
+#     def get_options(self, view):
+#         return [(office.name, office.name)
+#                 for office in Office.query.order_by(Office.name)]
+
+
 class MyAppLibraryViewEmpDetail(MyAppLibraryViewNoName):
     column_list = ('id', 'employee.employee_no', 'employee.full_name',
                    'plantilla.position', 'plantilla.office',
@@ -135,11 +161,22 @@ class MyAppLibraryViewEmpDetail(MyAppLibraryViewNoName):
                               'employee.employee_no']
     search_placeholder_text = ['Employee No.', 'Name', 'Position', 'Office',
                                'Assigned Office']
+    # column_filters = [
+    #     FilterByPosition(column=None, name='Position'),
+    #     FilterByOffice(column=None, name='Office'),
+    # ]
     column_filters = [
-        FilterEqual(column='employee.employee_no',
-                    name='Position',
-                    options=((1, 'Apples'),(2, 'Oranges'),(u'430014', u'430014')))
+        'plantilla.position.name',
+        'plantilla.office.name',
+        'assigned_office.name',
+        'employee.employee_no'
     ]
+    column_filter_labels = {
+        'plantilla.position.name': 'Position',
+        'plantilla.office.name': 'Office',
+        'assigned_office.name': 'Assigned Office',
+        'employee.employee_no': 'Employee Number'
+    }
 
 
 admin.add_view(MyAppLibraryView(Section, db.session))
