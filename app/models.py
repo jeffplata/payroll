@@ -1,5 +1,4 @@
 from app import db
-from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class Section(db.Model):
@@ -27,6 +26,21 @@ class Office(db.Model):
 
     def __repr__(self):
         return '<Office: %r>' % (self.name)
+
+    def __str__(self):
+        return self.name
+
+
+class Assigned_Office(db.Model):
+    __tablename__ = 'assigned_office'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False, unique=True)
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
+                              onupdate=db.func.current_timestamp())
+
+    def __repr__(self):
+        return '<Assigned Office: %r>' % (self.name)
 
     def __str__(self):
         return self.name
@@ -61,9 +75,6 @@ class Salary(db.Model):
     def __repr__(self):
         return '<Salary: %r/%r/%r>' % (self.sg, self.step, self.amount)
 
-    # def __str__(self):
-    #     return '[SG:{:2} Step:{:2}] {:10,.2f}'.format(self.sg, self.step,
-    #                                                   self.amount)
     def __str__(self):
         return '[{}-{}] {:10,.2f}'.format(self.sg, self.step, self.amount)
 
@@ -152,9 +163,9 @@ class Employee_Detail(db.Model):
     salary_id = db.Column(db.Integer,
         db.ForeignKey('salary.id', ondelete='CASCADE'))
     assigned_office_id = db.Column(db.Integer,
-        db.ForeignKey('office.id', ondelete='CASCADE'))
+        db.ForeignKey('assigned_office.id', ondelete='CASCADE'))
 
     employee = db.relationship('Employee')
     plantilla = db.relationship('Plantilla')
     salary = db.relationship('Salary')
-    assigned_office = db.relationship('Office')
+    assigned_office = db.relationship('Assigned_Office')

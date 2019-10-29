@@ -19,7 +19,8 @@ from sqlalchemy.orm import aliased
 
 # app specifics
 from app.models import Section, Office, Salary_reference, Salary, \
-    Position, Plantilla, Plantilla_type, Employee, Employee_Detail
+    Position, Plantilla, Plantilla_type, Employee, Employee_Detail, \
+    Assigned_Office
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -188,6 +189,7 @@ admin.add_view(MyAppLibraryView(Plantilla_type, db.session))
 admin.add_view(MyAppLibraryViewPlantilla(Plantilla, db.session))
 admin.add_view(MyAppLibraryViewEmployee(Employee, db.session))
 admin.add_view(MyAppLibraryViewEmpDetail(Employee_Detail, db.session))
+admin.add_view(MyAppLibraryView(Assigned_Office, db.session))
 
 # End: App specific views
 
@@ -225,6 +227,8 @@ def library_import(library):
         tables = [Plantilla]
     elif library == 'Employee':
         tables = [Employee]
+    elif library == 'Assigned_Office':
+        tables = [Assigned_Office]
     title = 'Import to '+library
     form = UploadForm()
     if form.validate_on_submit():
