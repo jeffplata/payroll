@@ -157,15 +157,13 @@ class MyAppLibraryViewEmpDetail(MyAppLibraryViewNoName):
                      'plantilla.position': 'Position',
                      'plantilla.office': 'Office'}
     column_searchable_list = ['plantilla.position.name',
+                              'employee.employee_no',
+                              'employee.last_name',
+                              'employee.first_name',
                               'plantilla.office.name',
-                              'assigned_office.name',
-                              'employee.employee_no']
+                              'assigned_office.name', ]
     search_placeholder_text = ['Employee No.', 'Name', 'Position', 'Office',
                                'Assigned Office']
-    # column_filters = [
-    #     FilterByPosition(column=None, name='Position'),
-    #     FilterByOffice(column=None, name='Office'),
-    # ]
     column_filters = [
         'plantilla.position.name',
         'plantilla.office.name',
@@ -229,6 +227,8 @@ def library_import(library):
         tables = [Employee]
     elif library == 'Assigned_Office':
         tables = [Assigned_Office]
+    elif library == 'Employee_Detail':
+        tables = [Employee_Detail]
     title = 'Import to '+library
     form = UploadForm()
     if form.validate_on_submit():
