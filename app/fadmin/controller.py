@@ -150,10 +150,11 @@ class MyAppLibraryViewEmployee(MyAppLibraryViewNoName):
 
 class MyAppLibraryViewEmpDetail(MyAppLibraryViewNoName):
     column_list = ('id', 'employee.employee_no', 'employee.full_name',
-                   'plantilla.position', 'plantilla.office',
+                   'plantilla.itemno', 'plantilla.position', 'plantilla.office',
                    'assigned_office')
     column_labels = {'id': 'id', 'employee.employee_no': 'Number',
                      'employee.full_name': 'Full Name',
+                     'plantilla.itemno': 'Item No',
                      'plantilla.position': 'Position',
                      'plantilla.office': 'Office'}
     column_searchable_list = ['plantilla.position.name',
@@ -161,6 +162,7 @@ class MyAppLibraryViewEmpDetail(MyAppLibraryViewNoName):
                               'employee.last_name',
                               'employee.first_name',
                               'plantilla.office.name',
+                              'plantilla.itemno',
                               'assigned_office.name', ]
     search_placeholder_text = ['Employee No.', 'Name', 'Position', 'Office',
                                'Assigned Office']
