@@ -37,10 +37,11 @@
             <li><a href="{{ url_for('main.index') }}">Home Page</a></li>
             <li><a href="#">Employees</a></li>
             <li><a href="{{ url_for('library.list_sections') }}">Sections</a></li>
+            <li><a href="{{ url_for('library.list_payrolls') }}">Payrolls</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
               {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('user.profile') }}"><span class="glyphicon glyphicon-user"></span> {{ _('Hello, ') }}{{current_user.username}}</a></li>
+                <li><a href="{{ url_for('user.profile') }}"><span class="glyphicon glyphicon-user"></span> {{current_user.username}}</a></li>
                 <li><a href="{{ url_for('user.logout') }}">{{ 'Sign out' }}</a></li>
               {% else %}
                 <li><a href="{{ url_for('user.register') }}">{{ 'Register' }}</a></li>

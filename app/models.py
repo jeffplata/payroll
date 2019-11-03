@@ -169,3 +169,29 @@ class Employee_Detail(db.Model):
     plantilla = db.relationship('Plantilla')
     salary = db.relationship('Salary')
     assigned_office = db.relationship('Assigned_Office')
+
+
+class Payroll(db.Model):
+    __tablename__ = 'payroll'
+    id = db.Column(db.Integer, primary_key=True)
+    office_id = db.Column(db.Integer,
+            db.ForeignKey('office.id', ondelete='CASCADE'))
+    payroll_type_id = db.Column(db.Integer,
+            db.ForeignKey('payroll_type.id', ondelete='CASCADE'))
+    date = db.Column(db.Date, default=db.func.current_timestamp())
+    period = db.Column(db.String(80), nullable=False)
+    is_open = db.Column(db.Boolean, default=True)
+
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
+                              onupdate=db.func.current_timestamp())
+
+    office = db.relationship('Office')
+    payroll_type = db.relationship('Payroll_Type')
+
+
+class Payroll_Type(db.Model):
+    __tablename__ = 'payroll_type'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False, unique=True)
+    active = db.Column(db.Boolean, default=True)

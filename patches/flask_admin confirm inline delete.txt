@@ -1,0 +1,42 @@
+flask_admin : confirm inline delete
+
+https://github.com/d3alek/flask-admin/commit/2ec0b4c1da6fec4b55cf8ae6df43ea4b9c430d92
+
+
+Showing  with 14 additions and 1 deletion.
+ 12  flask_admin/static/admin/js/helpers.js 
+@@ -0,0 +1,12 @@
+(function() {
+    window.faHelpers = {
+        // A simple confirm() wrapper
+        safeConfirm: function(msg) {
+            try {
+                return confirm(msg) ? true : false;
+            } catch (e) {
+                return false;
+            }
+        }
+    };
+})();
+
+
+ 1  flask_admin/templates/bootstrap3/admin/base.html 
+@@ -84,6 +84,7 @@
+    <script src="{{ admin_static.url(filename='bootstrap/bootstrap3/js/bootstrap.min.js', v='3.3.5') }}" type="text/javascript"></script>
+    <script src="{{ admin_static.url(filename='vendor/moment.min.js', v='2.9.0') }}" type="text/javascript"></script>
+    <script src="{{ admin_static.url(filename='vendor/select2/select2.min.js', v='3.5.2') }}" type="text/javascript"></script>
+    <script src="{{ admin_static.url(filename='admin/js/helpers.js', v='1.0.0') }}" type="text/javascript"></script>
+    {% if admin_view.extra_js %}
+      {% for js_url in admin_view.extra_js %}
+        <script src="{{ js_url }}" type="text/javascript"></script>
+
+ 2  flask_admin/templates/bootstrap3/admin/model/row_actions.html 
+@@ -31,7 +31,7 @@
+  {% elif csrf_token %}
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+  {% endif %}
+  <button onclick="return safeConfirm('{{ _gettext('Are you sure you want to delete this record?') }}');" title="{{ _gettext('Delete record') }}">
+  <button onclick="return faHelpers.safeConfirm('{{ _gettext('Are you sure you want to delete this record?') }}');" title="{{ _gettext('Delete record') }}">
+    <span class="fa fa-trash glyphicon glyphicon-trash"></span>
+  </button>
+</form>

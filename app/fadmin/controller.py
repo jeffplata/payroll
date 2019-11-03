@@ -20,7 +20,7 @@ from sqlalchemy.orm import aliased
 # app specifics
 from app.models import Section, Office, Salary_reference, Salary, \
     Position, Plantilla, Plantilla_type, Employee, Employee_Detail, \
-    Assigned_Office
+    Assigned_Office, Payroll, Payroll_Type
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -190,6 +190,7 @@ admin.add_view(MyAppLibraryViewPlantilla(Plantilla, db.session))
 admin.add_view(MyAppLibraryViewEmployee(Employee, db.session))
 admin.add_view(MyAppLibraryViewEmpDetail(Employee_Detail, db.session))
 admin.add_view(MyAppLibraryView(Assigned_Office, db.session))
+admin.add_view(MyAppLibraryView(Payroll_Type, db.session))
 
 # End: App specific views
 

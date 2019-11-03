@@ -4,6 +4,7 @@
     <font size="+2">Tasks</font>
     <br>
     {% block my_content %}
+        {% if 1 %}
         <a href="{{ url_for('fadmin.library_import', library='Section') }}">Import to Sections</a>
         <br>
         <a href="{{ url_for('fadmin.library_import', library='Office') }}">Import to Offices</a>
@@ -20,5 +21,6 @@
         <br>
         <a href="{{ url_for('fadmin.library_import', library='Employee_Detail') }}">Import to Employee Detail</a>
         <br>
+        {% endif %}
     {% endblock %}
 {% endblock %}
