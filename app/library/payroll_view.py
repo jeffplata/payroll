@@ -37,7 +37,7 @@ def list_payrolls():
         payrolls = Payroll.query.filter(Payroll.payroll_type.name.contains(search_text)).all()
         count = Payroll.query.filter(Payroll.payroll_type.name.contains(search_text)).count()
     else:
-        payrolls = Payroll.query.all()
+        payrolls = Payroll.query.all().order_by(Payroll.id)
         count = Payroll.query.count()
 
     if request.args.get('page') is not None:
@@ -77,7 +77,7 @@ def add_payroll():
     if form.validate_on_submit():
         payroll = Payroll(office_id=form.office_id.data,
                           date=form.date.data,
-                          payroll_type_id=form.payroll_type.data,
+                          payroll_type_id=form.payroll_type_id.data,
                           period=form.period.data)
         try:
             # add payroll to the database
@@ -115,7 +115,7 @@ def edit_payroll(id):
     if form.validate_on_submit():
         payroll.office_id = form.office_id.data
         payroll.date = form.date.data
-        payroll.payroll_type = form.payroll_type.data
+        payroll.payroll_type_id = form.payroll_type_id.data
         payroll.period = form.period.data
         db.session.commit()
         flash('You have successfully edited the payroll.')
@@ -127,7 +127,7 @@ def edit_payroll(id):
 
     form.office_id.data = payroll.office_id
     form.date.data = payroll.date
-    form.payroll_type.data = payroll.payroll_type
+    form.payroll_type_id.data = payroll.payroll_type_id
     form.period.data = payroll.period
 
     return render_template('library/payrolls/payroll.html', action="Edit",

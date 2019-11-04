@@ -195,3 +195,6 @@ class Payroll_Type(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False, unique=True)
     active = db.Column(db.Boolean, default=True)
+
+    def __str__(self):
+        return self.name

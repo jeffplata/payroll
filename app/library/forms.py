@@ -28,6 +28,6 @@ class PayrollForm(FlaskForm):
     """
     office_id = SelectField('Office', coerce=int, choices=Office_List())
     date = DateField('Date', validators=[DataRequired()])
-    payroll_type = SelectField('Office', coerce=int, choices=Payroll_Type_List())
+    payroll_type_id = SelectField('Type', coerce=int, choices=Payroll_Type_List())
     period = StringField('Period', validators=[DataRequired()])
     submit = SubmitField('Submit')
