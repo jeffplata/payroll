@@ -40,3 +40,4 @@ Flask-FontAwesome==0.1.2
 Flask-Excel==0.0.7 
 pyexcel-xls==0.5.8 
 pyexcel-xlsx==0.5.7 
+SQLAlchemy-Utils==0.35.0 

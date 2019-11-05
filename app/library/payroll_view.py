@@ -37,7 +37,7 @@ def list_payrolls():
         payrolls = Payroll.query.filter(Payroll.payroll_type.name.contains(search_text)).all()
         count = Payroll.query.filter(Payroll.payroll_type.name.contains(search_text)).count()
     else:
-        payrolls = Payroll.query.all().order_by(Payroll.id)
+        payrolls = Payroll.query.order_by(Payroll.id.desc()).all()
         count = Payroll.query.count()
 
     if request.args.get('page') is not None:
@@ -94,6 +94,7 @@ def add_payroll():
         return redirect(url_for('library.list_payrolls'))
 
     form.date.data = date.today()
+
     # load payroll template
     return render_template('library/payrolls/payroll.html', action="Add",
                            add_payroll=add_payroll, form=form,
