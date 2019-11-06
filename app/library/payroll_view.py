@@ -5,10 +5,11 @@ from flask_login import current_user, login_required
 from app import db
 from app.flask_pager import Pager
 from app.library import bp
-from app.models import Payroll
+from app.models import Payroll, Payroll_Type, Office
 
 from .forms import PayrollForm
 from datetime import date
+from sqlalchemy import or_
 
 
 def check_admin():
@@ -34,8 +35,14 @@ def list_payrolls():
     title = 'Payrolls'
 
     if search_text is not None:
-        payrolls = Payroll.query.filter(Payroll.payroll_type.name.contains(search_text)).all()
-        count = Payroll.query.filter(Payroll.payroll_type.name.contains(search_text)).count()
+        payrolls = Payroll.query.join(Payroll_Type).join(Office).filter(or_(
+                                        Payroll_Type.name.contains(search_text),
+                                        Office.name.contains(search_text)
+                                 )).order_by(Payroll.id.desc()).all()
+        count = Payroll.query.join(Payroll_Type).join(Office).filter(or_(
+                                        Payroll_Type.name.contains(search_text),
+                                        Office.name.contains(search_text)
+                                 )).count()
     else:
         payrolls = Payroll.query.order_by(Payroll.id.desc()).all()
         count = Payroll.query.count()

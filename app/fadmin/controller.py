@@ -14,13 +14,14 @@ from werkzeug import secure_filename
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import SubmitField
-from flask_admin.contrib.sqla.filters import BaseSQLAFilter
-from sqlalchemy.orm import aliased
+# from flask_admin.contrib.sqla.filters import BaseSQLAFilter
+# from sqlalchemy.orm import aliased
+# from markupsafe import Markup
 
 # app specifics
 from app.models import Section, Office, Salary_reference, Salary, \
     Position, Plantilla, Plantilla_type, Employee, Employee_Detail, \
-    Assigned_Office, Payroll, Payroll_Type
+    Assigned_Office, Payroll_Type, Earnings
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -191,6 +192,7 @@ admin.add_view(MyAppLibraryViewEmployee(Employee, db.session))
 admin.add_view(MyAppLibraryViewEmpDetail(Employee_Detail, db.session))
 admin.add_view(MyAppLibraryView(Assigned_Office, db.session))
 admin.add_view(MyAppLibraryView(Payroll_Type, db.session))
+admin.add_view(MyAppLibraryView(Earnings, db.session))
 
 # End: App specific views
 

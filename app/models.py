@@ -202,8 +202,8 @@ class Payroll_Type(db.Model):
 
 
 class payment_types(enum.Enum):
-    PAY: 'Payroll'
-    REM: 'Remittance'
+    PAY = 'Payroll'
+    REM = 'Remittance'
 
 
 class Earnings(db.Model):
