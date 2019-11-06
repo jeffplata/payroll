@@ -205,10 +205,20 @@ class payment_types(enum.Enum):
     PAY = 'Payroll'
     REM = 'Remittance'
 
+    @classmethod
+    def choices(cls):
+        return [(choice.name, choice.value) for choice in cls]
+
+    def __str__(self):
+        return self.name
+
+    def __html__(self):
+        return self.value
+
 
 class Earnings(db.Model):
     __tablename__ = 'earnings'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False, unique=True)
-    payment_type = db.Column(db.Enum(payment_types))
+    payment_type = db.Column(db.Enum(payment_types), nullable=False)
     active = db.Column(db.Boolean, default=True)

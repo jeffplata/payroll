@@ -180,6 +180,20 @@ class MyAppLibraryViewEmpDetail(MyAppLibraryViewNoName):
         'employee.employee_no': 'Employee Number'
     }
 
+from app.models import payment_types
+from flask_admin.model import typefmt
+
+
+def payment_type_formatter(view, context, model, name):
+    db_value = str(getattr(model, name))
+    enum_value = getattr(payment_types, db_value)
+    return enum_value.value
+
+
+class MyAppLibraryViewEarnings(MyAppLibraryView):
+    column_formatters = {'payment_type': payment_type_formatter}
+    form_choices = {'payment_type': payment_types.choices()}
+
 
 admin.add_view(MyAppLibraryView(Section, db.session))
 admin.add_view(MyAppLibraryView(Office, db.session))
@@ -192,7 +206,7 @@ admin.add_view(MyAppLibraryViewEmployee(Employee, db.session))
 admin.add_view(MyAppLibraryViewEmpDetail(Employee_Detail, db.session))
 admin.add_view(MyAppLibraryView(Assigned_Office, db.session))
 admin.add_view(MyAppLibraryView(Payroll_Type, db.session))
-admin.add_view(MyAppLibraryView(Earnings, db.session))
+admin.add_view(MyAppLibraryViewEarnings(Earnings, db.session))
 
 # End: App specific views
 
