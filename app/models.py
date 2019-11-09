@@ -177,6 +177,8 @@ class Payroll(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     office_id = db.Column(db.Integer,
             db.ForeignKey('office.id', ondelete='CASCADE'))
+    assigned_office_id = db.Column(db.Integer,
+            db.ForeignKey('assigned_office.id', ondelete='CASCADE'))
     payroll_type_id = db.Column(db.Integer,
             db.ForeignKey('payroll_type.id', ondelete='CASCADE'))
     date = db.Column(db.Date, default=db.func.current_timestamp())
@@ -189,6 +191,7 @@ class Payroll(db.Model):
 
     office = db.relationship('Office')
     payroll_type = db.relationship('Payroll_Type')
+    employees = db.relationship('Employee', secondary='payroll_employees')
 
 
 class Payroll_Type(db.Model):
@@ -197,8 +200,20 @@ class Payroll_Type(db.Model):
     name = db.Column(db.String(80), nullable=False, unique=True)
     active = db.Column(db.Boolean, default=True)
 
+    earnings = db.relationship('Earnings', secondary='payroll_type_earnings',
+                               backref='payroll_types')
+
     def __str__(self):
         return self.name
+
+
+class Payroll_Type_Earnings(db.Model):
+    __tablename__ = 'payroll_type_earnings'
+    id = db.Column(db.Integer, primary_key=True)
+    payroll_type_id = db.Column(db.Integer,
+            db.ForeignKey('payroll_type.id', ondelete='CASCADE'))
+    earnings_id = db.Column(db.Integer,
+            db.ForeignKey('earnings.id', ondelete='CASCADE'))
 
 
 class payment_types(enum.Enum):
@@ -220,5 +235,38 @@ class Earnings(db.Model):
     __tablename__ = 'earnings'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False, unique=True)
-    payment_type = db.Column(db.Enum(payment_types), nullable=False)
+    payment_type = db.Column(db.String(3), nullable=False)
     active = db.Column(db.Boolean, default=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Deductions(db.Model):
+    __tablename__ = 'deductions'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False, unique=True)
+    active = db.Column(db.Boolean, default=True)
+
+
+class Payroll_Earnings(db.Model):
+    __tablename__ = 'payroll_earnings'
+    id = db.Column(db.Integer, primary_key=True)
+    payroll_id = db.Column(db.Integer,
+            db.ForeignKey('payroll.id', ondelete='CASCADE'))
+    employee_id = db.Column(db.Integer,
+            db.ForeignKey('employee.id', ondelete='CASCADE'))
+    earnings_id = db.Column(db.Integer,
+            db.ForeignKey('earnings.id', ondelete='CASCADE'))
+    amount = db.Column(db.Numeric(15, 2))
+
+
+class Payroll_Employees(db.Model):
+    __tablename__ = 'payroll_employees'
+    id = db.Column(db.Integer, primary_key=True)
+    payroll_id = db.Column(db.Integer,
+            db.ForeignKey('payroll.id', ondelete='CASCADE'))
+    employee_id = db.Column(db.Integer,
+            db.ForeignKey('employee.id', ondelete='CASCADE'))
+
+    employee = db.relationship('Employee')

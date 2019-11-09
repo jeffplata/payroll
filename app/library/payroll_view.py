@@ -5,7 +5,8 @@ from flask_login import current_user, login_required
 from app import db
 from app.flask_pager import Pager
 from app.library import bp
-from app.models import Payroll, Payroll_Type, Office
+from app.models import Payroll, Payroll_Type, Office, Payroll_Employees,\
+    Employee_Detail, Plantilla, Employee
 
 from .forms import PayrollForm
 from datetime import date
@@ -164,3 +165,35 @@ def delete_payroll(id):
     return redirect(url_for('library.list_payrolls'))
 
     # return render_template(title="Delete payroll")
+
+
+@bp.route('/payrolls/detail/<int:id>', methods=['GET', 'POST'])
+@login_required
+def payroll_detail(id):
+    """
+    Show payroll details
+    """
+
+    # check_admin()
+
+    title = 'Payroll Detail'
+    payroll = Payroll.query.get_or_404(id)
+    payroll_lines = Payroll_Employees.query.\
+        filter(Payroll_Employees.payroll_id == id).all()
+
+    if not payroll_lines:
+        # there are no data yet
+        employees = Employee_Detail.query.join(Plantilla).join(Employee).\
+            filter(Plantilla.office_id == payroll.office_id).\
+            order_by(Employee.last_name, Employee.first_name).all()
+
+        for e in employees:
+            pe = Payroll_Employees(payroll_id=id, employee_id=e.employee_id)
+            db.session.add(pe)
+        db.session.commit()
+        payroll_lines = Payroll_Employees.query.\
+            filter(Payroll_Employees.payroll_id == id).all()
+
+    return render_template('library/payrolls/payroll_detail.html',
+                           payroll=payroll, payroll_lines=payroll_lines,
+                           title=title)

@@ -191,8 +191,14 @@ def payment_type_formatter(view, context, model, name):
 
 
 class MyAppLibraryViewEarnings(MyAppLibraryView):
+    column_list = ('id', 'name', 'payment_type', 'active', 'payroll_types')
     column_formatters = {'payment_type': payment_type_formatter}
     form_choices = {'payment_type': payment_types.choices()}
+
+
+class MyAppLibraryViewPayrollType(MyAppLibraryView):
+    column_list = ('id', 'name', 'active', 'earnings')
+    form_columns = column_list[1:]
 
 
 admin.add_view(MyAppLibraryView(Section, db.session))
@@ -205,7 +211,7 @@ admin.add_view(MyAppLibraryViewPlantilla(Plantilla, db.session))
 admin.add_view(MyAppLibraryViewEmployee(Employee, db.session))
 admin.add_view(MyAppLibraryViewEmpDetail(Employee_Detail, db.session))
 admin.add_view(MyAppLibraryView(Assigned_Office, db.session))
-admin.add_view(MyAppLibraryView(Payroll_Type, db.session))
+admin.add_view(MyAppLibraryViewPayrollType(Payroll_Type, db.session))
 admin.add_view(MyAppLibraryViewEarnings(Earnings, db.session))
 
 # End: App specific views

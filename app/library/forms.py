@@ -8,12 +8,14 @@ from app.models import Office, Payroll_Type
 
 def Office_List():
     # pass
-    return [(x.id, x.name) for x in db.session.query(Office).order_by(Office.name).all()]
+    _tup = [(x.id, x.name) for x in db.session.query(Office).order_by(Office.name).all()]
+    return _tup
 
 
 def Payroll_Type_List():
     # pass
-    return [(x.id, x.name) for x in db.session.query(Payroll_Type).all()]
+    _tup = [(x.id, x.name) for x in db.session.query(Payroll_Type).all()]
+    return _tup
 
 
 class SectionForm(FlaskForm):

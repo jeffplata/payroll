@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block main_content %}
+
+<font size="+3">{{ title }}</font>
+
+<div class="content-section">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+            <th width="5%">ID</th>
+            <th width="20%"> Name </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for pl in payroll_lines %}
+            <tr>
+                <td> {{ pl.employee_id }} </td>
+                <td> {{ pl.employee }} </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

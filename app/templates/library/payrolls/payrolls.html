@@ -54,7 +54,7 @@
               <tbody>
               {% for d in data_to_show %}
                 <tr>
-                  <td> <a href="#">{{ d.id }}</a> </td>
+                  <td> <a href="{{ url_for('library.payroll_detail', id=d.id) }}">{{ d.id }}</a> </td>
                   <td> {{ d.office }} </td>
                   <td> {{ d.date }} </td>
                   <td> {{ d.payroll_type }} </td>
