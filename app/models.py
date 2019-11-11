@@ -260,6 +260,8 @@ class Payroll_Earnings(db.Model):
             db.ForeignKey('earnings.id', ondelete='CASCADE'))
     amount = db.Column(db.Numeric(15, 2))
 
+    employee = db.relationship('Employee')
+
 
 class Payroll_Employees(db.Model):
     __tablename__ = 'payroll_employees'

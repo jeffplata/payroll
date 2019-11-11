@@ -11,6 +11,8 @@
             <th width="5%">ID</th>
             <th width="5%">Employee No.</th>
             <th width="20%">Name</th>
+            <th width="20%">Earnings id</th>
+            <th width="20%">amount</th>
             </tr>
         </thead>
 
@@ -20,6 +22,8 @@
                 <td> {{ pl.employee_id }} </td>
                 <td> {{ pl.employee.employee_no }} </td>
                 <td> {{ pl.employee.full_name }} </td>
+                <td> {{ pl.earnings_id }} </td>
+                <td> {{ pl.amount }} </td>
             </tr>
             {% endfor %}
         </tbody>

@@ -6,7 +6,8 @@ from app import db
 from app.flask_pager import Pager
 from app.library import bp
 from app.models import Payroll, Payroll_Type, Office, Payroll_Employees,\
-    Employee_Detail, Plantilla, Employee
+    Employee_Detail, Plantilla, Employee, Payroll_Earnings,\
+    Payroll_Type_Earnings
 
 from .forms import PayrollForm
 from datetime import date
@@ -178,6 +179,7 @@ def payroll_detail(id):
 
     title = 'Payroll Detail'
     payroll = Payroll.query.get_or_404(id)
+    """
     payroll_lines = Payroll_Employees.query.\
         filter(Payroll_Employees.payroll_id == id).all()
 
@@ -193,6 +195,44 @@ def payroll_detail(id):
         db.session.commit()
         payroll_lines = Payroll_Employees.query.\
             filter(Payroll_Employees.payroll_id == id).all()
+    """
+    payroll_lines = Payroll_Earnings.query.\
+        filter(Payroll_Earnings.payroll_id == id).all()
+
+    earnings = Payroll_Type_Earnings.query.\
+        filter_by(payroll_type_id=payroll.payroll_type_id)
+
+    if not payroll_lines:
+        # there are no data yet
+        employees = Employee_Detail.query.join(Plantilla).join(Employee).\
+            filter(Plantilla.office_id == payroll.office_id).\
+            order_by(Employee.last_name, Employee.first_name).all()
+
+        for e in employees:
+            for ea in earnings:
+                pe = Payroll_Earnings(payroll_id=id, employee_id=e.employee_id,
+                                      earnings_id=ea.earnings_id, amount=100)
+                db.session.add(pe)
+        db.session.commit()
+        payroll_lines = Payroll_Earnings.query.\
+            filter(Payroll_Earnings.payroll_id == id).all()
+
+    # cross-tabulate payroll lines
+    # for pl in payroll_lines:
+    # x = [i for i, v in enumerate(payroll_lines) if v.employee_id == 73].pop()
+
+    seen = set()
+    new_tuple = []
+    for item in payroll_lines:
+        if item.employee_id not in seen:
+            new_tuple.append(item)
+            seen.add(item.employee_id)
+
+    new_list = list(new_tuple)
+    for item in new_list:
+        # item[i].extend('sdsfsf')
+        print(item.employee.full_name)
+
 
     return render_template('library/payrolls/payroll_detail.html',
                            payroll=payroll, payroll_lines=payroll_lines,
