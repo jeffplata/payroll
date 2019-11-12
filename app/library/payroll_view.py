@@ -225,13 +225,12 @@ def payroll_detail(id):
     new_tuple = []
     for item in payroll_lines:
         if item.employee_id not in seen:
-            new_tuple.append(item)
+            new_tuple.append([item.employee_id, item.employee.employee_no, item.employee.full_name])
             seen.add(item.employee_id)
 
     new_list = list(new_tuple)
     for item in new_list:
-        # item[i].extend('sdsfsf')
-        print(item.employee.full_name)
+        print(item + ['ssss'])
 
 
     return render_template('library/payrolls/payroll_detail.html',
