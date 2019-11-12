@@ -200,7 +200,7 @@ def payroll_detail(id):
         filter(Payroll_Earnings.payroll_id == id).all()
 
     earnings = Payroll_Type_Earnings.query.\
-        filter_by(payroll_type_id=payroll.payroll_type_id)
+        filter_by(payroll_type_id=payroll.payroll_type_id).all()
 
     if not payroll_lines:
         # there are no data yet
@@ -226,13 +226,32 @@ def payroll_detail(id):
     for item in payroll_lines:
         if item.employee_id not in seen:
             new_tuple.append([item.employee_id, item.employee.employee_no, item.employee.full_name])
+            new_tuple[-1] += [0 for i in range(len(earnings))] # corresponds to number of earnings columns
+            if item.earnings_id == 1:
+                new_tuple[-1][2+1] = item.amount
+            else:
+                new_tuple[-1][2+2] = item.amount
             seen.add(item.employee_id)
+        else:
+            # new_tuple[-1] += [item.earnings_id, item.amount]
+
+            if item.earnings_id == 1:
+                new_tuple[-1][2+1] = item.amount
+            else:
+                new_tuple[-1][2+2] = item.amount
+            seen.add(item.employee_id)
+
+            # pass
+
 
     new_list = list(new_tuple)
     for item in new_list:
-        print(item + ['ssss'])
+        print(item)
 
 
     return render_template('library/payrolls/payroll_detail.html',
                            payroll=payroll, payroll_lines=payroll_lines,
                            title=title)
+
+# todo: create a generic function to compute earnings
+#   with standard parameters, to evaluate string formula
