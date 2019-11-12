@@ -199,6 +199,7 @@ class MyAppLibraryViewEarnings(MyAppLibraryView):
 class MyAppLibraryViewPayrollType(MyAppLibraryView):
     column_list = ('id', 'name', 'active', 'earnings')
     form_columns = column_list[1:]
+    column_details_list = column_list
 
 
 admin.add_view(MyAppLibraryView(Section, db.session))
