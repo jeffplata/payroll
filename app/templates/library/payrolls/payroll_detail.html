@@ -11,19 +11,21 @@
             <th width="5%">ID</th>
             <th width="5%">Employee No.</th>
             <th width="20%">Name</th>
-            <th width="20%">Earnings id</th>
-            <th width="20%">amount</th>
+            {% for c in column_titles[3:] %}
+            <th width="10%"> {{ c }}</th>
+            {% endfor %}
             </tr>
         </thead>
 
         <tbody>
             {% for pl in payroll_lines %}
             <tr>
-                <td> {{ pl.employee_id }} </td>
-                <td> {{ pl.employee.employee_no }} </td>
-                <td> {{ pl.employee.full_name }} </td>
-                <td> {{ pl.earnings_id }} </td>
-                <td> {{ pl.amount }} </td>
+                <td> {{ pl[0] }} </td>
+                <td> {{ pl[1] }} </td>
+                <td> {{ pl[2] }} </td>
+                {% for c in column_titles[3:] %}
+                <td> {{ pl[loop.index+2] }}</td>
+                {% endfor %}
             </tr>
             {% endfor %}
         </tbody>

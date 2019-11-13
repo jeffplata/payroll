@@ -215,6 +215,8 @@ class Payroll_Type_Earnings(db.Model):
     earnings_id = db.Column(db.Integer,
             db.ForeignKey('earnings.id', ondelete='CASCADE'))
 
+    earnings = db.relationship('Earnings')
+
 
 class payment_types(enum.Enum):
     PAY = 'Payroll'

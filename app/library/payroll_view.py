@@ -199,8 +199,9 @@ def payroll_detail(id):
     payroll_lines = Payroll_Earnings.query.\
         filter(Payroll_Earnings.payroll_id == id).all()
 
-    earnings = Payroll_Type_Earnings.query.\
-        filter_by(payroll_type_id=payroll.payroll_type_id).all()
+    earnings = Payroll_Type_Earnings.query\
+        .filter_by(payroll_type_id=payroll.payroll_type_id)\
+        .order_by(Payroll_Type_Earnings.id).all()
 
     if not payroll_lines:
         # there are no data yet
@@ -210,47 +211,41 @@ def payroll_detail(id):
 
         for e in employees:
             for ea in earnings:
+                if ea.earnings_id == 1:
+                    amount = 18000
+                elif ea.earnings_id == 2:
+                    amount = 2000
+                else:
+                    amount = 100
                 pe = Payroll_Earnings(payroll_id=id, employee_id=e.employee_id,
-                                      earnings_id=ea.earnings_id, amount=100)
+                                      earnings_id=ea.earnings_id, amount=amount)
                 db.session.add(pe)
         db.session.commit()
         payroll_lines = Payroll_Earnings.query.\
             filter(Payroll_Earnings.payroll_id == id).all()
 
-    # cross-tabulate payroll lines
-    # for pl in payroll_lines:
-    # x = [i for i, v in enumerate(payroll_lines) if v.employee_id == 73].pop()
+    # create list for column titles
+    column_titles = ['ID', 'Employee No', 'Name']
+    for item in earnings:
+        column_titles += [item.earnings.name]
 
+    # flatten payroll lines, remove dups
     seen = set()
     new_tuple = []
     for item in payroll_lines:
         if item.employee_id not in seen:
-            new_tuple.append([item.employee_id, item.employee.employee_no, item.employee.full_name])
-            new_tuple[-1] += [0 for i in range(len(earnings))] # corresponds to number of earnings columns
-            if item.earnings_id == 1:
-                new_tuple[-1][2+1] = item.amount
-            else:
-                new_tuple[-1][2+2] = item.amount
-            seen.add(item.employee_id)
-        else:
-            # new_tuple[-1] += [item.earnings_id, item.amount]
-
-            if item.earnings_id == 1:
-                new_tuple[-1][2+1] = item.amount
-            else:
-                new_tuple[-1][2+2] = item.amount
+            new_tuple.append([item.employee_id, item.employee.employee_no,
+                              item.employee.full_name])
+            new_tuple[-1] += [0 for i in range(len(earnings))]
             seen.add(item.employee_id)
 
-            # pass
-
-
-    new_list = list(new_tuple)
-    for item in new_list:
-        print(item)
-
+        position = next((i for i, ea in enumerate(earnings) if ea.earnings_id == item.earnings_id), -1)
+        if position > -1:
+            new_tuple[-1][3+position] = item.amount
 
     return render_template('library/payrolls/payroll_detail.html',
-                           payroll=payroll, payroll_lines=payroll_lines,
+                           payroll=payroll, payroll_lines=new_tuple,
+                           column_titles=column_titles,
                            title=title)
 
 # todo: create a generic function to compute earnings
