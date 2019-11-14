@@ -7,7 +7,7 @@ from app.flask_pager import Pager
 from app.library import bp
 from app.models import Payroll, Payroll_Type, Office, Payroll_Employees,\
     Employee_Detail, Plantilla, Employee, Payroll_Earnings,\
-    Payroll_Type_Earnings
+    Payroll_Type_Earnings, Salary
 
 from .forms import PayrollForm
 from datetime import date
@@ -238,4 +238,11 @@ def payroll_detail(id):
 
 def get_earnings(employee_id, formula):
     sal_id = Employee_Detail.query\
-        .filter_by(Employee_Detail.employee_id == employee_id)
+        .filter(Employee_Detail.employee_id == employee_id).first()
+    sal_amt = Salary.query.filter(Salary.id == sal_id).first()
+
+    retval = formula.replace('basic', str(sal_amt))
+
+    retval = eval(formula)
+
+    return retval
