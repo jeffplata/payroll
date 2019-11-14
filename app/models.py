@@ -237,6 +237,8 @@ class Earnings(db.Model):
     __tablename__ = 'earnings'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False, unique=True)
+    formula = db.Column(db.String(255))
+    fixed_amount = db.Column(db.Numeric(15,2))
     payment_type = db.Column(db.String(3), nullable=False)
     active = db.Column(db.Boolean, default=True)
 

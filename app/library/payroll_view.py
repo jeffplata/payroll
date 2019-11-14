@@ -179,23 +179,7 @@ def payroll_detail(id):
 
     title = 'Payroll Detail'
     payroll = Payroll.query.get_or_404(id)
-    """
-    payroll_lines = Payroll_Employees.query.\
-        filter(Payroll_Employees.payroll_id == id).all()
 
-    if not payroll_lines:
-        # there are no data yet
-        employees = Employee_Detail.query.join(Plantilla).join(Employee).\
-            filter(Plantilla.office_id == payroll.office_id).\
-            order_by(Employee.last_name, Employee.first_name).all()
-
-        for e in employees:
-            pe = Payroll_Employees(payroll_id=id, employee_id=e.employee_id)
-            db.session.add(pe)
-        db.session.commit()
-        payroll_lines = Payroll_Employees.query.\
-            filter(Payroll_Employees.payroll_id == id).all()
-    """
     payroll_lines = Payroll_Earnings.query.\
         filter(Payroll_Earnings.payroll_id == id).all()
 
@@ -250,3 +234,8 @@ def payroll_detail(id):
 
 # todo: create a generic function to compute earnings
 #   with standard parameters, to evaluate string formula
+
+
+def get_earnings(employee_id, formula):
+    sal_id = Employee_Detail.query\
+        .filter_by(Employee_Detail.employee_id == employee_id)
