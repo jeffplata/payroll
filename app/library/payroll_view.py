@@ -195,12 +195,17 @@ def payroll_detail(id):
 
         for e in employees:
             for ea in earnings:
-                if ea.earnings_id == 1:
-                    amount = 18000
-                elif ea.earnings_id == 2:
-                    amount = 2000
+                if ea.earnings.fixed_amount:
+                    amount = ea.earnings.fixed_amount
                 else:
-                    amount = 100
+                    amount = get_earnings_amount(e.employee_id,
+                                                 ea.earnings.formula)
+                # if ea.earnings_id == 1:
+                #     amount = 18000
+                # elif ea.earnings_id == 2:
+                #     amount = 2000
+                # else:
+                #     amount = 100
                 pe = Payroll_Earnings(payroll_id=id, employee_id=e.employee_id,
                                       earnings_id=ea.earnings_id, amount=amount)
                 db.session.add(pe)
@@ -232,17 +237,28 @@ def payroll_detail(id):
                            column_titles=column_titles,
                            title=title)
 
-# todo: create a generic function to compute earnings
-#   with standard parameters, to evaluate string formula
 
-
-def get_earnings(employee_id, formula):
+def get_earnings_amount(employee_id, formula):
     sal_id = Employee_Detail.query\
-        .filter(Employee_Detail.employee_id == employee_id).first()
-    sal_amt = Salary.query.filter(Salary.id == sal_id).first()
+        .filter(Employee_Detail.employee_id == employee_id).first().salary_id
+    salary = Salary.query.filter(Salary.id == sal_id).first()
+    sal_amt = salary.amount
+    sg = salary.sg
 
     retval = formula.replace('basic', str(sal_amt))
+    retval = retval.replace('sg', str(sg))
 
-    retval = eval(formula)
+    retval = eval(retval)
 
     return retval
+
+
+"""
+(208833.33+((b-666667)*.35) if b >= 666667
+ else 40833.33+((b-166667)*.32) if b >= 166667
+ else 10833.33+((b-66667)*.30) if b >= 66667
+ else 2500+((b-33333)*.25) if b >= 33333
+ else 0+((b-20833)*.20) if b >= 20833
+ else 0
+)
+"""
