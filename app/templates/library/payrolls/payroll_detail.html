@@ -24,7 +24,7 @@
                 <td> {{ pl[1] }} </td>
                 <td> {{ pl[2] }} </td>
                 {% for c in column_titles[3:] %}
-                <td> {{ pl[loop.index+2] }}</td>
+                <td align="right"> {{ pl[loop.index+2] }}</td>
                 {% endfor %}
             </tr>
             {% endfor %}

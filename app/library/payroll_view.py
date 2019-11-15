@@ -245,8 +245,7 @@ def get_earnings_amount(employee_id, formula):
     sal_amt = salary.amount
     sg = salary.sg
 
-    retval = formula.replace('basic', str(sal_amt))
-    retval = retval.replace('sg', str(sg))
+    retval = formula.replace('basic', str(sal_amt)).replace('sg', str(sg))
 
     retval = eval(retval)
 
