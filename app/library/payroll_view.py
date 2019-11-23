@@ -253,6 +253,7 @@ def get_earnings_amount(employee_id, formula):
 
 
 """
+wtax:
 (208833.33+((b-666667)*.35) if b >= 666667
  else 40833.33+((b-166667)*.32) if b >= 166667
  else 10833.33+((b-66667)*.30) if b >= 66667
