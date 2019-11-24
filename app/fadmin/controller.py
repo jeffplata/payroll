@@ -191,10 +191,11 @@ def payment_type_formatter(view, context, model, name):
 
 
 class MyAppLibraryViewEarnings(MyAppLibraryView):
-    column_list = ('id', 'name', 'payment_type', 'formula', 'fixed_amount', 'active', 'sequence', 'payroll_types')
+    column_list = ('id', 'name', 'payment_type', 'formula', 'fixed_amount',
+                   'active', 'sequence', 'payroll_types')
+    form_columns = column_list[1:]
     column_formatters = {'payment_type': payment_type_formatter}
     form_choices = {'payment_type': payment_types.choices()}
-    column_editable_list = {'sequence'}
     column_default_sort = ('sequence')
 
     def after_model_change(self, form, model, is_created):
