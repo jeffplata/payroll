@@ -236,7 +236,7 @@ class payment_types(enum.Enum):
 class Earnings(db.Model):
     __tablename__ = 'earnings'
     id = db.Column(db.Integer, primary_key=True)
-    sequence = db.Column(db.Float, autoincrement=True)    # try this
+    sequence = db.Column(db.Float)
     name = db.Column(db.String(80), nullable=False, unique=True)
     formula = db.Column(db.String(255))
     fixed_amount = db.Column(db.Numeric(15, 2))
