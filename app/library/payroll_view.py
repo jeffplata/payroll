@@ -200,12 +200,6 @@ def payroll_detail(id):
                 else:
                     amount = get_earnings_amount(e.employee_id,
                                                  ea.earnings.formula)
-                # if ea.earnings_id == 1:
-                #     amount = 18000
-                # elif ea.earnings_id == 2:
-                #     amount = 2000
-                # else:
-                #     amount = 100
                 pe = Payroll_Earnings(payroll_id=id, employee_id=e.employee_id,
                                       earnings_id=ea.earnings_id, amount=amount)
                 db.session.add(pe)
