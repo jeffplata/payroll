@@ -277,3 +277,25 @@ class Payroll_Employees(db.Model):
             db.ForeignKey('employee.id', ondelete='CASCADE'))
 
     employee = db.relationship('Employee')
+
+
+class Payroll_Group(db.Model):
+    __tablename__ = 'payroll_group'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False, unique=True)
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
+                              onupdate=db.func.current_timestamp())
+
+
+class Payroll_Group_Employee(db.Model):
+    __tablename__ = 'payroll_group_employee'
+    id = db.Column(db.Integer, primary_key=True)
+    payroll_group_id = db.Column(db.Integer,
+        db.ForeignKey('payroll_group.id', ondelete='CASCADE'))
+    employee_id = db.Column(db.Integer,
+        db.ForeignKey('employee.id', ondelete='CASCADE'))
+    employee = db.relationship('Employee')
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
+                              onupdate=db.func.current_timestamp())
