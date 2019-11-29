@@ -38,6 +38,7 @@
             <li><a href="#">Employees</a></li>
             <li><a href="{{ url_for('library.list_sections') }}">Sections</a></li>
             <li><a href="{{ url_for('library.list_payrolls') }}">Payrolls</a></li>
+            <li><a href="{{ url_for('library.list_payrolls') }}">Payroll Groups</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
               {% if current_user.is_authenticated %}

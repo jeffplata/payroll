@@ -21,7 +21,7 @@ from wtforms import SubmitField
 # app specifics
 from app.models import Section, Office, Salary_reference, Salary, \
     Position, Plantilla, Plantilla_type, Employee, Employee_Detail, \
-    Assigned_Office, Payroll_Type, Earnings
+    Assigned_Office, Payroll_Type, Earnings, Payroll_Group
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -211,6 +211,10 @@ class MyAppLibraryViewPayrollType(MyAppLibraryView):
     column_details_list = column_list
 
 
+class MyAppLibraryViewPayrollGroup(MyAppLibraryView):
+    pass
+
+
 admin.add_view(MyAppLibraryView(Section, db.session))
 admin.add_view(MyAppLibraryView(Office, db.session))
 admin.add_view(MyAppLibraryViewNoName(Salary_reference, db.session))
@@ -223,6 +227,7 @@ admin.add_view(MyAppLibraryViewEmpDetail(Employee_Detail, db.session))
 admin.add_view(MyAppLibraryView(Assigned_Office, db.session))
 admin.add_view(MyAppLibraryViewPayrollType(Payroll_Type, db.session))
 admin.add_view(MyAppLibraryViewEarnings(Earnings, db.session))
+admin.add_view(MyAppLibraryViewPayrollGroup(Payroll_Group, db.session))
 
 # End: App specific views
 
