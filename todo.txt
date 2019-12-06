@@ -1,4 +1,4 @@
 2019-11-30 12:26 AM
 [ ] develop the Payroll Groups pages
 [ ] Change Payroll foreignkey from Office to Payroll Groups
-[ ] Payroll Groups should be restricted according to logged in user
+[ ] Payroll Groups should be restricted access according to logged in user
