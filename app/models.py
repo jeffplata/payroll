@@ -287,6 +287,9 @@ class Payroll_Group(db.Model):
     date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
                               onupdate=db.func.current_timestamp())
 
+    employees = db.relationship('Employee', secondary='payroll_group_employee',
+                                lazy='dynamic')
+
 
 class Payroll_Group_Employee(db.Model):
     __tablename__ = 'payroll_group_employee'

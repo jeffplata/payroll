@@ -35,3 +35,11 @@ class PayrollForm(FlaskForm):
     payroll_type_id = SelectField('Type', coerce=int, choices=Payroll_Type_List())
     period = StringField('Period', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+
+class PayrollGroupForm(FlaskForm):
+    """
+    Form for users to add or edit a payroll group
+    """
+    name = StringField('Name', validators=[DataRequired()])
+    submit = SubmitField('Submit')
