@@ -33,8 +33,10 @@ def list_payroll_groups():
     title = 'Payroll Groups'
 
     if search_text is not None:
-        payroll_groups = Payroll_Group.query.filter(Payroll_Group.name.contains(search_text)).all()
-        count = Payroll_Group.query.filter(Payroll_Group.name.contains(search_text)).count()
+        payroll_groups = Payroll_Group.query\
+            .filter(Payroll_Group.name.contains(search_text)).all()
+        count = Payroll_Group.query\
+            .filter(Payroll_Group.name.contains(search_text)).count()
     else:
         payroll_groups = Payroll_Group.query.all()
         count = Payroll_Group.query.count()
@@ -90,9 +92,9 @@ def add_payroll_group():
         return redirect(url_for('library.list_payroll_groups'))
 
     # load payroll group template
-    return render_template('library/payroll_groups/payroll_group.html', action="Add",
-                           add_payroll_group=add_payroll_group, form=form,
-                           title="Add Payroll Group")
+    return render_template('library/payroll_groups/payroll_group.html',
+                           action="Add", add_payroll_group=add_payroll_group,
+                           form=form, title="Add Payroll Group")
 
 
 @bp.route('/payroll_groups/edit/<int:id>', methods=['GET', 'POST'])
@@ -118,9 +120,10 @@ def edit_payroll_group(id):
         return redirect(url_for('library.list_payroll_groups'))
 
     form.name.data = payroll_group.name
-    return render_template('library/payroll_groups/payroll_group.html', action="Edit",
-                           add_payroll_group=add_payroll_group, form=form,
-                           payroll_group=payroll_group, title="Edit Payroll_Group")
+    return render_template('library/payroll_groups/payroll_group.html',
+                           action="Edit", add_payroll_group=add_payroll_group,
+                           form=form, payroll_group=payroll_group,
+                           title="Edit Payroll_Group")
 
 
 @bp.route('/payroll_groups/delete/<int:id>', methods=['GET', 'POST'])
@@ -132,13 +135,14 @@ def delete_payroll_group(id):
     check_admin()
 
     payroll_group = Payroll_Group.query.get_or_404(id)
-    # if window.confirm('Delete '+payroll_group.name):
+    payroll_group_name = payroll_group.name
+    # delete confirmation is done at the template level
     db.session.delete(payroll_group)
     db.session.commit()
-    flash('You have successfully deleted the payroll group.')
+    flash("You have successfully deleted the payroll group '{}'."
+          .format(payroll_group_name))
 
     # redirect to the payroll groups page
-    # return redirect(url_for('library.list_payroll_groups'))
     if 'back_url' in session:
         return redirect(session['back_url'])
     return redirect(url_for('library.list_payroll_groups'))

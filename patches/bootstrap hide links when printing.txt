@@ -1,0 +1,14 @@
+/*
+  THIS WILL prevent bootstrap from showing links addresses
+    when printing.
+
+  Somewhere in style.css, or other stylesheets
+*/
+
+/* this will prevent links from being revealed
+  when printing the webpage */
+@media print {
+   a[href]:after {
+    content: none !important;
+   }
+}

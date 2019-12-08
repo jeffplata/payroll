@@ -1,4 +1,7 @@
 2019-11-30 12:26 AM
 [ ] develop the Payroll Groups pages
+   [ ] show list of enployees in a payroll group when _link_ is clicked
+       (text under Employees column)
+       actions on employee list: add / move / remove
 [ ] Change Payroll foreignkey from Office to Payroll Groups
 [ ] Payroll Groups should be restricted access according to logged in user

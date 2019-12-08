@@ -43,3 +43,10 @@
 {% macro form_button(url, content, method='post', class='btn-link') -%}
 <form style="display: inline;" action='{{url}}' method='{{method}}'><button class="{{class|safe}}">{{content}}</button></form>
 {%- endmacro %}
+
+/* Don't print link hrefs */
+@media print {
+  a[href]:after {
+    content: none
+  }
+}

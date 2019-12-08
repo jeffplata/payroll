@@ -34,3 +34,11 @@
     margin: 0 auto;
     width: 75% !important; 
  }
+
+/* this will prevent links from being revealed
+  when printing the webpage */
+@media print {
+   a[href]:after {
+    content: none !important;
+   }
+}
