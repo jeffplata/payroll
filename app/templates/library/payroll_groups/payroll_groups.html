@@ -2,6 +2,18 @@
 {% import "_macros.html" as macros %}
 {% extends "layout.html" %}
 
+{% block styles %}
+{{ super() }}
+
+.empCount {
+  width: 100;
+  color: #red;
+  font-size: 12px;
+  text-align: right;
+}
+
+{% endblock %}
+
 {% block title %}{{ title }}{% endblock %}
 {% block main_content %}
 
@@ -54,7 +66,9 @@
                   <!-- <td> <a href="{{ url_for('library.payroll_detail', id=d.id) }}">{{ d.id }}</a> </td> -->
                   <td> {{ d.id }} </td>
                   <td> {{ d.name }} </td>
-                  <td> {{ d.employees.count() }} </td>
+                  {% set cnt = d.employees.count() %}
+                  <td> <span style="float: left; width: 20px; text-align: right;">{{ cnt }}</span>&nbsp;&nbsp;&nbsp;
+                       <a href="{{ url_for('library.manage_payroll_group', id=d.id) }}">Manage</a> </td>
                   <td>
                     <a href="{{ url_for('library.edit_payroll_group', id=d.id) }}">
                       <i class="fa fa-pen"></i> Edit 

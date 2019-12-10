@@ -148,3 +148,25 @@ def delete_payroll_group(id):
     return redirect(url_for('library.list_payroll_groups'))
 
     # return render_template(title="Delete Payroll Group")
+
+
+@bp.route('/payroll_groups/members/<int:id>', methods=['GET', 'POST'])
+@login_required
+def manage_payroll_group(id):
+    """
+    Manage payroll group members
+    """
+    check_admin()
+
+    payroll_group = Payroll_Group.query.get_or_404(id)
+    payroll_group_name = payroll_group.name
+
+    title = 'Payroll Group Members'
+
+    # redirect to the payroll groups page
+    # if 'back_url' in session:
+    #     return redirect(session['back_url'])
+    # return redirect(url_for('library.list_payroll_groups'))
+
+    return render_template('library/payroll_groups/payroll_group_members.html',
+                           title=title)

@@ -1,0 +1,26 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "layout.html" %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block main_content %}
+<div class="content-section">
+ <div class="outer">
+    <div class="middle">
+      <div class="inner">
+        <div class="center">
+            {{ title }}
+            <br/>
+            Manage Payroll Group Members
+            Add / Edit / Move / Remove
+            <br>
+            <a href="{{ request.referrer }}" class="btn btn-primary btn-default btn-md">
+                    <i class="fa fa-arrow-left"></i>
+                    Back
+                    </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
