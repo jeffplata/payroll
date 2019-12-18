@@ -1,0 +1,22 @@
+
+IN layout.html (the master template)
+
+{% block styles %}
+  {{super()}}
+
+  !!!!!! this is for bootstrap
+  <link href="/static/css/bootstrap.css" rel="stylesheet">
+
+
+  <link href="/static/css/global.css" rel="stylesheet">
+  <link href="/static/css/style.css" rel="stylesheet">
+{% endblock %}
+
+
+
+  {% block scripts %}
+    {{super()}}
+    !!!!!!!! this is for jquery
+    <script src="{{ url_for('static', filename='jquery.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.js') }}" type="text/javascript"></script>
+  {% endblock %}
