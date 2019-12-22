@@ -1,4 +1,5 @@
 {% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
 {% extends "layout.html" %}
 {% block title %}
     {{ title }}
@@ -9,15 +10,58 @@
     <div class="middle">
       <div class="inner">
         <div class="center">
-            {{ title }}
-            <br/>
-            Manage Payroll Group Members
+            <h1>{{ title }}</h1>
+            Manage Payroll Group Members<br>
             Add / Edit / Move / Remove
+            <hr>
             <br>
-            <a href="{{ request.referrer }}" class="btn btn-primary btn-default btn-md">
+            Payroll Group: <strong>{{ group_name }}</strong><br>
+
+
+            <!-- if 'back_url' in session:
+            return redirect(session['back_url']) -->
+
+            {% if 'back_url' in session %}
+            <!-- <a href="{{ request.referrer }}" class="btn btn-primary btn-default btn-md"> -->
+            <a href="{{ session['back_url'] }}" class="btn btn-primary btn-default btn-md">
                     <i class="fa fa-arrow-left"></i>
                     Back
                     </a>
+            {% endif %}
+
+          {% if data_to_show %}
+          <hr class="intro-divider">
+          {% if request.args['search'] %}
+          <strong>Employees in this group containing '{{ request.args['search'] }}'</strong>
+          {% endif %}
+          {% if pages|length > 3 %}
+          {{ macros.pagination_widget(pages, 'library.manage_payroll_group', id=group_id) }}
+          {% endif %}
+          <div class="center">
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th width="85%"> Name </th>
+                  <th width="15%"> Remove </th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for d in data_to_show %}
+                <tr>
+                  <td> {{ d.full_name }} </td>
+                  <td>
+                    <!-- <a href="{{ url_for('library.delete_payroll_group', id=d.id) }}" data-toggle="modal" data-target="#mymodal{{ d.id }}"> -->
+                    <a href="#" data-toggle="modal" data-target="#mymodal{{ d.id }}">
+                      <i class="fa fa-trash"></i> Remove 
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% endif %}
+
         </div>
       </div>
     </div>

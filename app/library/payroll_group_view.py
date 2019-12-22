@@ -159,9 +159,27 @@ def manage_payroll_group(id):
     check_admin()
 
     payroll_group = Payroll_Group.query.get_or_404(id)
-    payroll_group_name = payroll_group.name
+    group_name = payroll_group.name
+    group_members = payroll_group.employees
+    count = group_members.count()
 
     title = 'Payroll Group Members'
+
+    if request.args.get('page') is not None:
+        page = int(request.args.get('page'))
+    else:
+        page = 1
+
+    data = group_members
+    if data:
+        pager = Pager(page, count)
+        pages = pager.get_pages()
+        skip = (page - 1) * current_app.config['PAGE_SIZE']
+        limit = current_app.config['PAGE_SIZE']
+        data_to_show = data[skip: skip + limit]
+    else:
+        pages = None
+        data_to_show = None
 
     # redirect to the payroll groups page
     # if 'back_url' in session:
@@ -169,4 +187,6 @@ def manage_payroll_group(id):
     # return redirect(url_for('library.list_payroll_groups'))
 
     return render_template('library/payroll_groups/payroll_group_members.html',
-                           title=title)
+                           title=title, group_name=group_name, group_id=id,
+                           pages=pages, data_to_show=data_to_show,
+                           )
