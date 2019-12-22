@@ -43,11 +43,13 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
               {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('user.profile') }}"><span class="glyphicon glyphicon-user"></span> {{current_user.username}}</a></li>
-                <li><a href="{{ url_for('user.logout') }}">{{ 'Sign out' }}</a></li>
+              <!-- <li><a href="{{ url_for('user.profile') }}"><span class="glyphicon glyphicon-user"></span> {{current_user.username}}</a></li> -->
+              <li><a href="{{ url_for('user.profile') }}"><span class="fa fa-user"></span> {{current_user.username}}</a></li>
+              <li><a href="{{ url_for('user.logout') }}"><span class="fa fa-sign-out-alt"></span> {{ 'Sign out' }}</a></li>
               {% else %}
                 <li><a href="{{ url_for('user.register') }}">{{ 'Register' }}</a></li>
-                <li><a href="{{ url_for('user.login') }}"><span class="glyphicon glyphicon-log-in"></span>  {{ _('Sign in') }}</a></li>
+                <!-- <li><a href="{{ url_for('user.login') }}"><span class="glyphicon glyphicon-log-in"></span>  {{ _('Sign in') }}</a></li> -->
+                <li><a href="{{ url_for('user.login') }}"><span class="fa fa-sign-in-alt"></span>  {{ _('Sign in') }}</a></li>
               {% endif %}
             </ul>
           </strong>

@@ -49,6 +49,11 @@ def create_app(config_class=Config):
         app.config['FLASK_ADMIN_SWATCH'] = 'lumen'
         admin.init_app(app)
 
+        # font-awesome config
+        app.config.update(
+            FONTAWESOME_SERVE_LOCAL=True,
+            FONTAWESOME_USE_MINIFIED=True)
+
         from app.errors import bp as errors_bp
         app.register_blueprint(errors_bp)
 
