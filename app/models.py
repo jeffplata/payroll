@@ -288,6 +288,7 @@ class Payroll_Group(db.Model):
                               onupdate=db.func.current_timestamp())
 
     employees = db.relationship('Employee', secondary='payroll_group_employee',
+                                order_by=Employee.last_name+Employee.first_name,
                                 lazy='dynamic')
 
 

@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 
 from .forms import PayrollGroupForm
 from app import db
-from app.models import Payroll_Group
+from app.models import Payroll_Group, Employee, Payroll_Group_Employee
 from app.library import bp
 
 from app.flask_pager import Pager
@@ -158,12 +158,29 @@ def manage_payroll_group(id):
     """
     check_admin()
 
+    search_text = request.args.get('search')
+
     payroll_group = Payroll_Group.query.get_or_404(id)
     group_name = payroll_group.name
-    group_members = payroll_group.employees
-    count = group_members.count()
+    # group_members = payroll_group.employees
+    # count = group_members.count()
 
     title = 'Payroll Group Members'
+
+    if search_text is not None:
+        group_members = Employee.query\
+            .join(Payroll_Group_Employee)\
+            .join(Payroll_Group)\
+            .filter(Payroll_Group.id == id, 
+                    Employee.last_name.contains(search_text)
+                    ).order_by(Employee.last_name, Employee.first_name).all()
+        count = Employee.query\
+            .join(Payroll_Group_Employee)\
+            .join(Payroll_Group)\
+            .filter(Payroll_Group.id == id, Employee.last_name.contains(search_text)).count()
+    else:
+        group_members = payroll_group.employees
+        count = payroll_group.employees.count()
 
     if request.args.get('page') is not None:
         page = int(request.args.get('page'))
@@ -180,11 +197,6 @@ def manage_payroll_group(id):
     else:
         pages = None
         data_to_show = None
-
-    # redirect to the payroll groups page
-    # if 'back_url' in session:
-    #     return redirect(session['back_url'])
-    # return redirect(url_for('library.list_payroll_groups'))
 
     return render_template('library/payroll_groups/payroll_group_members.html',
                            title=title, group_name=group_name, group_id=id,

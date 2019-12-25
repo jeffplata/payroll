@@ -110,30 +110,31 @@
   </div>
 </div>
 
+{% if data_to_show %}
+  {% for d in data_to_show %}
+  <!-- Modal -->
+    <div class="modal fade" id="mymodal{{ d.id }}" role="dialog">
+      <div class="modal-dialog modal-md">
 
-{% for d in data_to_show %}
- <!-- Modal -->
-  <div class="modal fade" id="mymodal{{ d.id }}" role="dialog">
-    <div class="modal-dialog modal-md">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h5 class="modal-title">Confirm Delete</h5>
+          </div>
+          <div class="modal-body">
+            <p>Delete '{{ d.name }}'?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="window.location.href = '{{ url_for("library.delete_payroll_group", id=d.id) }}';">Delete</button>
+            <!-- button onclick might not work inside a form tag -->
+          </div>
+        </div>
 
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h5 class="modal-title">Confirm Delete</h5>
-        </div>
-        <div class="modal-body">
-          <p>Delete '{{ d.name }}'?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="window.location.href = '{{ url_for("library.delete_payroll_group", id=d.id) }}';">Delete</button>
-          <!-- button onclick might not work inside a form tag -->
-        </div>
       </div>
-
     </div>
-  </div>
-{% endfor %}
+  {% endfor %}
+{% endif %}
 
 {% endblock %}
