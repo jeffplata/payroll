@@ -6,6 +6,7 @@ from .forms import PayrollGroupForm
 from app import db
 from app.models import Payroll_Group, Employee, Payroll_Group_Employee
 from app.library import bp
+from sqlalchemy import or_
 
 from app.flask_pager import Pager
 
@@ -162,8 +163,6 @@ def manage_payroll_group(id):
 
     payroll_group = Payroll_Group.query.get_or_404(id)
     group_name = payroll_group.name
-    # group_members = payroll_group.employees
-    # count = group_members.count()
 
     title = 'Payroll Group Members'
 
@@ -171,13 +170,19 @@ def manage_payroll_group(id):
         group_members = Employee.query\
             .join(Payroll_Group_Employee)\
             .join(Payroll_Group)\
-            .filter(Payroll_Group.id == id, 
-                    Employee.last_name.contains(search_text)
+            .filter(Payroll_Group.id == id)\
+            .filter((Employee.last_name.contains(search_text)) |
+                    (Employee.first_name.contains(search_text)) |
+                    (Employee.middle_name.contains(search_text))
                     ).order_by(Employee.last_name, Employee.first_name).all()
         count = Employee.query\
             .join(Payroll_Group_Employee)\
             .join(Payroll_Group)\
-            .filter(Payroll_Group.id == id, Employee.last_name.contains(search_text)).count()
+            .filter(Payroll_Group.id == id)\
+            .filter((Employee.last_name.contains(search_text)) |
+                    (Employee.first_name.contains(search_text)) |
+                    (Employee.middle_name.contains(search_text))
+                    ).count()
     else:
         group_members = payroll_group.employees
         count = payroll_group.employees.count()
