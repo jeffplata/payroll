@@ -18,11 +18,13 @@ class Pager:
         return self.pages
 
     def get_navigation(self):
+        page_delta = 1 if self.page > 1 else 0
         prev_navigation = [{'page_label': '&laquo;',
-                           'href': self.page - 1,
+                           'href': self.page - page_delta,
                            'class': 'disabled' if self.page == 1 else ''}]
+        page_delta = 1 if self.page < self.last_page else 0
         next_navigation = [{'page_label': '&raquo;',
-                            'href': self.page + 1,
+                            'href': self.page + page_delta,
                             'class': 'disabled' if self.page >= self.last_page else ''}]
         return prev_navigation, next_navigation
 
