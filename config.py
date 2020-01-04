@@ -11,7 +11,7 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     db_from_env = os.environ.get('DATABASE_URL')
     if db_from_env:
-        db_from_env = db_from_env.replace('{basedir}', basedir+'\\')
+        db_from_env = db_from_env.replace('{basedir}', basedir)
     SQLALCHEMY_DATABASE_URI = db_from_env\
         or \
         'sqlite:///' + os.path.join(basedir, 'app.sqlite')
