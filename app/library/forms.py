@@ -30,9 +30,11 @@ class PayrollForm(FlaskForm):
     """
     Form to add or edit a payroll
     """
-    office_id = SelectField('Office', coerce=int, choices=Office_List())
+    # office_id = SelectField('Office', coerce=int, choices=Office_List())
+    office_id = SelectField('Office', coerce=int)
     date = DateField('Date', validators=[DataRequired()])
-    payroll_type_id = SelectField('Type', coerce=int, choices=Payroll_Type_List())
+    # payroll_type_id = SelectField('Type', coerce=int, choices=Payroll_Type_List())
+    payroll_type_id = SelectField('Type', coerce=int)
     period = StringField('Period', validators=[DataRequired()])
     submit = SubmitField('Submit')
 

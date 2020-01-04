@@ -122,6 +122,8 @@ def edit_payroll(id):
 
     payroll = Payroll.query.get_or_404(id)
     form = PayrollForm(obj=payroll)
+    form.office_id.choices = form.Office_List()
+    form.payroll_type_id.choices = form.Payroll_Type_List()
     if form.validate_on_submit():
         payroll.office_id = form.office_id.data
         payroll.date = form.date.data

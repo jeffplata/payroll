@@ -1,0 +1,9 @@
+10:28 PM 1/4/2020
+
+Fixed the persistent error when initializing databases
+  caused by SelectField choices; set the choices in
+  the view definition
+
+Added flask_script in the requirements.txt
+
+Added README.md
