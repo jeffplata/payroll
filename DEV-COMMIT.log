@@ -1,3 +1,10 @@
+11:26 PM 1/4/2020
+
+Fixed get_earnings_amount to account for no formula, no fixed amount
+
+Fixed pager users so that count=0 is taken into account
+
+
 10:28 PM 1/4/2020
 
 Fixed the persistent error when initializing databases

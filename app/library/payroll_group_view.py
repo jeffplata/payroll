@@ -193,7 +193,7 @@ def manage_payroll_group(id):
         page = 1
 
     data = group_members
-    if data:
+    if count > 0:
         pager = Pager(page, count)
         pages = pager.get_pages()
         skip = (page - 1) * current_app.config['PAGE_SIZE']

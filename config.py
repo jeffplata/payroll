@@ -14,7 +14,7 @@ class Config(object):
         db_from_env = db_from_env.replace('{basedir}', basedir+'\\')
     SQLALCHEMY_DATABASE_URI = db_from_env\
         or \
-        'sqlite:///' + os.path.join(basedir, 'app.sqlite1')
+        'sqlite:///' + os.path.join(basedir, 'app.sqlite')
     # 'postgresql+psycopg2://postgres:hybrid@localhost/payroll'
     # 'firebird+fdb://sysdba:masterkey@localhost:3050/' + os.path.join(basedir, 'app.fdb')
     # SQLALCHEMY_ECHO = True

@@ -9,7 +9,7 @@ from app.models import Payroll, Payroll_Type, Office, Payroll_Employees,\
     Employee_Detail, Plantilla, Employee, Payroll_Earnings,\
     Payroll_Type_Earnings, Salary
 
-from .forms import PayrollForm
+from .forms import PayrollForm, Office_List, Payroll_Type_List
 from datetime import date
 from sqlalchemy import or_
 
@@ -55,7 +55,7 @@ def list_payrolls():
         page = 1
 
     data = payrolls
-    if data:
+    if count > 0:
         pager = Pager(page, count)
         pages = pager.get_pages()
         skip = (page - 1) * current_app.config['PAGE_SIZE']
@@ -83,6 +83,8 @@ def add_payroll():
     add_payroll = True
 
     form = PayrollForm()
+    form.office_id.choices = Office_List()
+    form.payroll_type_id.choices = Payroll_Type_List()
     if form.validate_on_submit():
         payroll = Payroll(office_id=form.office_id.data,
                           date=form.date.data,
@@ -122,8 +124,9 @@ def edit_payroll(id):
 
     payroll = Payroll.query.get_or_404(id)
     form = PayrollForm(obj=payroll)
-    form.office_id.choices = form.Office_List()
-    form.payroll_type_id.choices = form.Payroll_Type_List()
+    form.office_id.choices = Office_List()
+    form.payroll_type_id.choices = Payroll_Type_List()
+
     if form.validate_on_submit():
         payroll.office_id = form.office_id.data
         payroll.date = form.date.data
@@ -203,7 +206,8 @@ def payroll_detail(id):
                     amount = get_earnings_amount(e.employee_id,
                                                  ea.earnings.formula)
                 pe = Payroll_Earnings(payroll_id=id, employee_id=e.employee_id,
-                                      earnings_id=ea.earnings_id, amount=amount)
+                                      earnings_id=ea.earnings_id, amount=amount
+                                      )
                 db.session.add(pe)
         db.session.commit()
         payroll_lines = Payroll_Earnings.query.\
@@ -241,9 +245,11 @@ def get_earnings_amount(employee_id, formula):
     sal_amt = salary.amount
     sg = salary.sg
 
-    retval = formula.replace('basic', str(sal_amt)).replace('sg', str(sg))
-
-    retval = eval(retval)
+    if formula:
+        retval = formula.replace('basic', str(sal_amt)).replace('sg', str(sg))
+        retval = eval(retval)
+    else:
+        retval = 0
 
     return retval
 
