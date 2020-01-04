@@ -9,10 +9,12 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') \
-        .replace('{basedir}', basedir+'\\')
-    # or \
-    # 'sqlite:///' + os.path.join(basedir, 'app.db')
+    db_from_env = os.environ.get('DATABASE_URL')
+    if db_from_env:
+        db_from_env = db_from_env.replace('{basedir}', basedir+'\\')
+    SQLALCHEMY_DATABASE_URI = db_from_env\
+        or \
+        'sqlite:///' + os.path.join(basedir, 'app.sqlite1')
     # 'postgresql+psycopg2://postgres:hybrid@localhost/payroll'
     # 'firebird+fdb://sysdba:masterkey@localhost:3050/' + os.path.join(basedir, 'app.fdb')
     # SQLALCHEMY_ECHO = True
