@@ -5,9 +5,9 @@
 {% block title %}Payrolls{% endblock %}
 {% block main_content %}
 
-<!-- <div class="content-section"> -->
-  <!-- <div class="outer-100"> -->
-    <!-- <div class="middle"> -->
+<div class="content-section">
+  <div class="outer-100">
+    <div class="middle">
       <div class="inner">
         <font size="+3">{{ title }}</font>
         <form action="{{ url_for('library.list_payrolls', search=request.form['search']) }}" method="GET">
@@ -91,9 +91,8 @@
             Add Payroll
           </a>
           </div>
-        <!-- </div> -->
       </div>
-    <!-- </div> -->
-  <!-- </div> -->
-<!-- </div> -->
+    </div>
+  </div>
+</div>
 {% endblock %}

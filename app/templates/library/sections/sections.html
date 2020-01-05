@@ -9,7 +9,6 @@
   <div class="outer">
     <div class="middle">
       <div class="inner">
-        <!-- <h2 style="text-align:center;">Sections</h2> -->
         <font size="+3">{{ title }}</font>
         <form action="{{ url_for('library.list_sections', search=request.form['search']) }}" method="GET">
             <div class="row">

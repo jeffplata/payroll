@@ -1,21 +1,35 @@
-.outer {
-    display: table;
-    position: relative;
-    height: 70%;
-    width: 75%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 0)
+
+body { padding-top: 0px; }
+@media screen and (max-width: 980px) {
+    body { padding-top: 40px; }
+}
+@media screen and (max-width: 768px) {
+    body { padding-top: 0px; }
 }
 
-.outer-100 {
-    display: table;
-    position: relative;
-    height: 70%;
-    width: 100%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 0)
+
+@media screen and (min-width: 1200px) {
+    .outer {
+        display: table;
+        position: relative;
+        height: 70%;
+        width: 75%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 0)
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .outer-100 {
+        display: table;
+        position: relative;
+        height: 70%;
+        width: 100%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 0)
+    }
 }
 
 .middle {
@@ -32,7 +46,7 @@
     /* di naman nagamit */
     float: none;
     margin: 0 auto;
-    width: 75% !important; 
+    width: 100% !important; 
  }
 
 /* this will prevent links from being revealed
