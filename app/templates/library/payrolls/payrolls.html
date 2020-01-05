@@ -5,11 +5,10 @@
 {% block title %}Payrolls{% endblock %}
 {% block main_content %}
 
-<div class="content-section">
-  <div class="outer-100">
-    <div class="middle">
+<!-- <div class="content-section"> -->
+  <!-- <div class="outer-100"> -->
+    <!-- <div class="middle"> -->
       <div class="inner">
-        <!-- <h2 style="text-align:center;">Payrolls</h2> -->
         <font size="+3">{{ title }}</font>
         <form action="{{ url_for('library.list_payrolls', search=request.form['search']) }}" method="GET">
             <div class="row">
@@ -17,7 +16,7 @@
                     <div class="input-group">
                         <input class="form-control mb-2" name="search" placeholder="Search Here" autocomplete="off" autofocus="autofocus" type="text">
                         <div class="input-group-btn">
-                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
                 </div>
@@ -74,7 +73,7 @@
               </tbody>
             </table>
           </div>
-          <div style="text-align: center">
+          <!-- <div style="text-align: center"> -->
         {% else %}
           <div style="text-align: center">
             <br>
@@ -92,9 +91,9 @@
             Add Payroll
           </a>
           </div>
-        </div>
+        <!-- </div> -->
       </div>
-    </div>
-  </div>
-</div>
+    <!-- </div> -->
+  <!-- </div> -->
+<!-- </div> -->
 {% endblock %}
